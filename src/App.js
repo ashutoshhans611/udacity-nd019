@@ -14,6 +14,11 @@ class BooksApp extends React.Component {
   };
 
   state = { bookshelfs: this.BOOKSHELFS };
+
+  updateBooks = books => {
+    this.setState({ books });
+  };
+
   componentDidMount() {
     let bookshelfs = this.BOOKSHELFS;
 
@@ -37,7 +42,10 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        <Route path="/search" render={() => <SearchBook />} />
+        <Route
+          path="/search"
+          render={() => <SearchBook updateBooks={this.updateBooks} />}
+        />
         <Route
           path="/"
           exact
