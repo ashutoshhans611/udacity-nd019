@@ -9,8 +9,7 @@ class BooksApp extends React.Component {
   BOOKSHELFS = {
     currentlyReading: { title: "Currently Reading", books: [] },
     wantToRead: { title: "Want to Read", books: [] },
-    read: { title: "Read", books: [] },
-    none: { title: "None", books: [] }
+    read: { title: "Read", books: [] }
   };
 
   state = { bookshelfs: this.BOOKSHELFS };
@@ -39,17 +38,45 @@ class BooksApp extends React.Component {
       });
   }
 
+  handleSelect = (book, event) => {
+    let bookshelfs = this.state.bookshelfs;
+
+    if (Object.keys(this.BOOKSHELFS).includes(book.shelf)) {
+      bookshelfs[book.shelf].books = bookshelfs[book.shelf].books.filter(b => {
+        return b.id !== book.id;
+      });
+    }
+
+    book.shelf = event.target.value;
+
+    if (Object.keys(this.BOOKSHELFS).includes(event.target.value)) {
+      bookshelfs[book.shelf].books.push(book);
+    }
+    this.setState({ bookshelfs });
+
+    BooksAPI.update(book, event.target.value);
+  };
+
   render() {
     return (
       <div className="app">
         <Route
           path="/search"
-          render={() => <SearchBook updateBooks={this.updateBooks} />}
+          render={() =>
+            <SearchBook
+              updateBooks={this.updateBooks}
+              bookshelfs={this.state.bookshelfs}
+              handleSelect={this.handleSelect}
+            />}
         />
         <Route
           path="/"
           exact
-          render={() => <ListBooks bookshelfs={this.state.bookshelfs} />}
+          render={() =>
+            <ListBooks
+              bookshelfs={this.state.bookshelfs}
+              handleSelect={this.handleSelect}
+            />}
         />
       </div>
     );

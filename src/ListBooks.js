@@ -1,16 +1,23 @@
+import _ from "lodash";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import _ from "lodash";
 
 class ListContacts extends Component {
   state = { bookshelfs: {} };
+
   static propTypes = {
-    bookshelfs: PropTypes.object.isRequired
+    bookshelfs: PropTypes.object.isRequired,
+    handleSelect: PropTypes.func.isRequired
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ bookshelfs: nextProps.bookshelfs });
+  }
+
   render() {
-    const { bookshelfs } = this.props;
+    const { handleSelect } = this.props;
+    const { bookshelfs } = this.state;
 
     return (
       <div className="list-books">
@@ -39,11 +46,15 @@ class ListContacts extends Component {
                                   width: 128,
                                   height: 193,
                                   backgroundImage: `url("${book.imageLinks
-                                    .smallThumbnail || ""}")`
+                                    ? book.imageLinks.smallThumbnail
+                                    : ""}")`
                                 }}
                               />
                               <div className="book-shelf-changer">
-                                <select>
+                                <select
+                                  value={key}
+                                  onChange={e => handleSelect(book, e)}
+                                >
                                   <option value="none" disabled>
                                     Move to...
                                   </option>
@@ -52,6 +63,7 @@ class ListContacts extends Component {
                                       {b.title}
                                     </option>
                                   )}
+                                  <option value="none">None</option>
                                 </select>
                               </div>
                             </div>

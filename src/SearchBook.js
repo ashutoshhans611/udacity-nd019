@@ -1,5 +1,7 @@
+import _ from "lodash";
 import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import * as BooksAPI from "./BooksAPI";
 
 class SearchBook extends React.Component {
@@ -7,6 +9,11 @@ class SearchBook extends React.Component {
     search_results: [],
     query: "",
     error: ""
+  };
+
+  static propTypes = {
+    bookshelfs: PropTypes.object.isRequired,
+    handleSelect: PropTypes.func.isRequired
   };
 
   searchBook(query = "") {
@@ -42,8 +49,8 @@ class SearchBook extends React.Component {
   };
 
   render() {
+    const { bookshelfs, handleSelect } = this.props;
     const { search_results, query, error } = this.state;
-    console.log(search_results);
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -64,32 +71,50 @@ class SearchBook extends React.Component {
             <div className="error">
               {error}
             </div>}
-          <ol className="books-grid">
-            {search_results.map(book =>
-              <li key={book.id}>
-                <div className="book">
-                  <div className="book-top">
-                    <div
-                      className="book-cover"
-                      style={{
-                        width: 128,
-                        height: 193,
-                        backgroundImage: `url("${book.imageLinks
-                          ? book.imageLinks.smallThumbnail
-                          : ""}")`
-                      }}
-                    />
+          <div className="bookshelf-books">
+            <ol className="books-grid">
+              {search_results.map(book =>
+                <li key={book.id}>
+                  <div className="book">
+                    <div className="book-top">
+                      <div
+                        className="book-cover"
+                        style={{
+                          width: 128,
+                          height: 193,
+                          backgroundImage: `url("${book.imageLinks
+                            ? book.imageLinks.smallThumbnail
+                            : ""}")`
+                        }}
+                      />
+                      <div className="book-shelf-changer">
+                        <select
+                          value={book.shelf}
+                          onChange={e => handleSelect(book, e)}
+                        >
+                          <option value="none" disabled>
+                            Move to...
+                          </option>
+                          {_.map(bookshelfs, (b, k) =>
+                            <option value={k} key={k}>
+                              {b.title}
+                            </option>
+                          )}
+                          <option value="none">None</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="book-title">
+                      {book.title}
+                    </div>
+                    <div className="book-authors">
+                      {book.authors}
+                    </div>
                   </div>
-                  <div className="book-title">
-                    {book.title}
-                  </div>
-                  <div className="book-authors">
-                    {book.authors}
-                  </div>
-                </div>
-              </li>
-            )}
-          </ol>
+                </li>
+              )}
+            </ol>
+          </div>
         </div>
       </div>
     );
