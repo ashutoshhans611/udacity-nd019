@@ -7,7 +7,7 @@ import Book from "./Book";
 
 class SearchBook extends React.Component {
   state = {
-    books: [],
+    search_results: [],
     query: "",
     error: ""
   };
@@ -20,18 +20,18 @@ class SearchBook extends React.Component {
   queryBooks(query = "") {
     if (query !== "") {
       BooksAPI.search(query)
-        .then(books => {
-          if (books.error) {
-            this.setState({ books: [], error: books.error });
+        .then(search_results => {
+          if (search_results.error) {
+            this.setState({ search_results: [], error: search_results.error });
           } else {
-            this.setState({ books, error: "" });
+            this.setState({ search_results, error: "" });
           }
         })
         .catch(err => {
-          this.setState({ error: err.error, books: [] });
+          this.setState({ error: err.error, search_results: [] });
         });
     } else {
-      this.setState({ books: [], error: "" });
+      this.setState({ search_results: [], error: "" });
     }
   }
 
@@ -50,9 +50,8 @@ class SearchBook extends React.Component {
   };
 
   render() {
-    const { bookshelfs, onBookUpdate } = this.props;
-    const { books, query, error } = this.state;
-
+    const { bookshelfs, books, onBookUpdate } = this.props;
+    const { search_results, query, error } = this.state;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -75,11 +74,15 @@ class SearchBook extends React.Component {
             </div>}
           <div className="bookshelf-books">
             <ol className="books-grid">
-              {books.map(book =>
+              {search_results.map(book =>
                 <Book
                   key={book.id}
                   bookshelfs={bookshelfs}
-                  book={book}
+                  book={
+                    books.find(b => {
+                      if (b.id === book.id) return b;
+                    }) || book
+                  }
                   onBookUpdate={onBookUpdate}
                 />
               )}
