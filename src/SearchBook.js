@@ -42,7 +42,7 @@ class SearchBook extends React.Component {
   }
 
   updateQuery = query => {
-    this.setState({ query: query.trim() });
+    this.setState({ query });
   };
 
   clearQuery = () => {
