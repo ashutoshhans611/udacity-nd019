@@ -6,12 +6,13 @@ import ListBooks from "./ListBooks";
 import "./App.css";
 
 class BooksApp extends React.Component {
+  bookshelfs = {
+    currentlyReading: { title: "Currently Reading" },
+    wantToRead: { title: "Want to Read" },
+    read: { title: "Read" }
+  };
+
   state = {
-    bookshelfs: {
-      currentlyReading: { title: "Currently Reading" },
-      wantToRead: { title: "Want to Read" },
-      read: { title: "Read" }
-    },
     books: []
   };
 
@@ -30,25 +31,28 @@ class BooksApp extends React.Component {
   }
 
   onBookUpdate = (book, event) => {
-    book.shelf = event.target.value;
-    let books = this.state.books.filter(b => b.id !== book.id);
-
-    if (Object.keys(this.state.bookshelfs).includes(book.shelf))
-      books.push(book);
-
-    this.setState({ books });
-    BooksAPI.update(book, event.target.value);
+    const shelf = event.target.value;
+    BooksAPI.update(book, shelf)
+      .then(() => {
+        book.shelf = shelf;
+        let books = this.state.books.filter(b => b.id !== book.id);
+        if (Object.keys(this.bookshelfs).includes(book.shelf)) books.push(book);
+        this.setState({ books });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   render() {
-    const { books, bookshelfs } = this.state;
+    const { books } = this.state;
     return (
       <div className="app">
         <Route
           path="/search"
           render={() =>
             <SearchBook
-              bookshelfs={bookshelfs}
+              bookshelfs={this.bookshelfs}
               books={books}
               onBookUpdate={this.onBookUpdate}
             />}
@@ -58,7 +62,7 @@ class BooksApp extends React.Component {
           exact
           render={() =>
             <ListBooks
-              bookshelfs={bookshelfs}
+              bookshelfs={this.bookshelfs}
               books={books}
               onBookUpdate={this.onBookUpdate}
             />}
