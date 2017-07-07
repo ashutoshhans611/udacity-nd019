@@ -17,7 +17,7 @@ class SearchBook extends React.Component {
     onBookUpdate: PropTypes.func.isRequired
   };
 
-  searchBook(query = "") {
+  queryBooks(query = "") {
     if (query !== "") {
       BooksAPI.search(query)
         .then(books => {
@@ -37,7 +37,7 @@ class SearchBook extends React.Component {
 
   componentWillUpdate(nextProps, nextState) {
     if (nextState.query !== this.state.query) {
-      this.searchBook(nextState.query);
+      this.queryBooks(nextState.query);
     }
   }
 
