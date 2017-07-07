@@ -6,67 +6,51 @@ import ListBooks from "./ListBooks";
 import "./App.css";
 
 class BooksApp extends React.Component {
-  BOOKSHELFS = {
-    currentlyReading: { title: "Currently Reading", books: [] },
-    wantToRead: { title: "Want to Read", books: [] },
-    read: { title: "Read", books: [] }
-  };
-
-  state = { bookshelfs: this.BOOKSHELFS };
-
-  updateBooks = books => {
-    this.setState({ books });
+  state = {
+    bookshelfs: {
+      currentlyReading: { title: "Currently Reading" },
+      wantToRead: { title: "Want to Read" },
+      read: { title: "Read" }
+    },
+    books: []
   };
 
   componentDidMount() {
-    let bookshelfs = this.BOOKSHELFS;
-
     BooksAPI.getAll()
       .then(books => {
         if (books.error) {
-          this.setState({ bookshelfs: this.BOOKSHELFS, error: books.error });
+          this.setState({ books: [], error: books.error });
         } else {
-          books.map(function(book) {
-            bookshelfs[book.shelf].books.push(book);
-          });
-
-          this.setState({ bookshelfs: bookshelfs, error: "" });
+          this.setState({ books: books, error: "" });
         }
       })
       .catch(err => {
-        this.setState({ error: err.error, bookshelfs: this.BOOKSHELFS });
+        this.setState({ books: [], error: err });
       });
   }
 
-  handleSelect = (book, event) => {
-    let bookshelfs = this.state.bookshelfs;
-
-    if (Object.keys(this.BOOKSHELFS).includes(book.shelf)) {
-      bookshelfs[book.shelf].books = bookshelfs[book.shelf].books.filter(b => {
-        return b.id !== book.id;
-      });
-    }
-
+  onBookUpdate = (book, event) => {
     book.shelf = event.target.value;
+    let books = this.state.books.filter(b => b.id !== book.id);
 
-    if (Object.keys(this.BOOKSHELFS).includes(event.target.value)) {
-      bookshelfs[book.shelf].books.push(book);
-    }
-    this.setState({ bookshelfs });
+    if (Object.keys(this.state.bookshelfs).includes(book.shelf))
+      books.push(book);
 
+    this.setState({ books });
     BooksAPI.update(book, event.target.value);
   };
 
   render() {
+    const { books, bookshelfs } = this.state;
     return (
       <div className="app">
         <Route
           path="/search"
           render={() =>
             <SearchBook
-              updateBooks={this.updateBooks}
-              bookshelfs={this.state.bookshelfs}
-              handleSelect={this.handleSelect}
+              bookshelfs={bookshelfs}
+              books={books}
+              onBookUpdate={this.onBookUpdate}
             />}
         />
         <Route
@@ -74,8 +58,9 @@ class BooksApp extends React.Component {
           exact
           render={() =>
             <ListBooks
-              bookshelfs={this.state.bookshelfs}
-              handleSelect={this.handleSelect}
+              bookshelfs={bookshelfs}
+              books={books}
+              onBookUpdate={this.onBookUpdate}
             />}
         />
       </div>

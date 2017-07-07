@@ -2,22 +2,17 @@ import _ from "lodash";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import Book from "./Book";
 
-class ListContacts extends Component {
-  state = { bookshelfs: {} };
-
+class ListBooks extends Component {
   static propTypes = {
     bookshelfs: PropTypes.object.isRequired,
-    handleSelect: PropTypes.func.isRequired
+    books: PropTypes.array.isRequired,
+    onBookUpdate: PropTypes.func.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ bookshelfs: nextProps.bookshelfs });
-  }
-
   render() {
-    const { handleSelect } = this.props;
-    const { bookshelfs } = this.state;
+    const { bookshelfs, books, onBookUpdate } = this.props;
 
     return (
       <div className="list-books">
@@ -26,59 +21,26 @@ class ListContacts extends Component {
         </div>
         <div className="list-books-content">
           <div>
-            {_.map(
-              bookshelfs,
-              (bookshelf, key) =>
-                bookshelf.books.length > 0 &&
-                <div className="bookshelf" key={key}>
-                  <h2 className="bookshelf-title">
-                    {bookshelf.title}
-                  </h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {bookshelf.books.map(book =>
-                        <li key={book.id}>
-                          <div className="book">
-                            <div className="book-top">
-                              <div
-                                className="book-cover"
-                                style={{
-                                  width: 128,
-                                  height: 193,
-                                  backgroundImage: `url("${book.imageLinks
-                                    ? book.imageLinks.smallThumbnail
-                                    : ""}")`
-                                }}
-                              />
-                              <div className="book-shelf-changer">
-                                <select
-                                  value={key}
-                                  onChange={e => handleSelect(book, e)}
-                                >
-                                  <option value="none" disabled>
-                                    Move to...
-                                  </option>
-                                  {_.map(bookshelfs, (b, k) =>
-                                    <option value={k} key={k}>
-                                      {b.title}
-                                    </option>
-                                  )}
-                                  <option value="none">None</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div className="book-title">
-                              {book.title}
-                            </div>
-                            <div className="book-authors">
-                              {book.authors}
-                            </div>
-                          </div>
-                        </li>
+            {_.map(bookshelfs, (bookshelf, key) =>
+              <div className="bookshelf" key={key}>
+                <h2 className="bookshelf-title">
+                  {bookshelf.title}
+                </h2>
+                <div className="bookshelf-books">
+                  <ol className="books-grid">
+                    {books
+                      .filter(book => book.shelf === key)
+                      .map(book =>
+                        <Book
+                          key={book.id}
+                          bookshelfs={bookshelfs}
+                          book={book}
+                          onBookUpdate={onBookUpdate}
+                        />
                       )}
-                    </ol>
-                  </div>
+                  </ol>
                 </div>
+              </div>
             )}
           </div>
         </div>
@@ -90,4 +52,4 @@ class ListContacts extends Component {
   }
 }
 
-export default ListContacts;
+export default ListBooks;
