@@ -1,0 +1,3 @@
+[submodule "project-readable/Server"]
+	path = project-readable/Server
+	url = git@github.com:udacity/reactnd-project-readable-starter.git
