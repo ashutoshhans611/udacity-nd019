@@ -6,7 +6,8 @@ import "./App.css";
 
 class App extends Component {
   state = {
-    categories: []
+    categories: [],
+    posts: []
   };
 
   componentDidMount() {
@@ -21,13 +22,29 @@ class App extends Component {
       .catch(err => {
         this.setState({ categories: [], error: err });
       });
+
+    ReadableAPI.getAllPosts()
+      .then(posts => {
+        if (posts.error) {
+          this.setState({ posts: [], error: posts.error });
+        } else {
+          this.setState({ posts: posts, error: "" });
+        }
+      })
+      .catch(err => {
+        this.setState({ posts: [], error: err });
+      });
   }
 
   render() {
-    const { categories } = this.state;
+    const { categories, posts } = this.state;
     return (
       <div className="app">
-        <Route path="/" exact render={() => <Root categories={categories} />} />
+        <Route
+          path="/"
+          exact
+          render={() => <Root categories={categories} posts={posts} />}
+        />
       </div>
     );
   }
