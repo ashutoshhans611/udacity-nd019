@@ -1,18 +1,33 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { Route } from "react-router-dom";
+import * as ReadableAPI from "./ReadableAPI";
+import Root from "./components/Root";
+import "./App.css";
 
 class App extends Component {
+  state = {
+    categories: []
+  };
+
+  componentDidMount() {
+    ReadableAPI.getCategories()
+      .then(categories => {
+        if (categories.error) {
+          this.setState({ categories: [], error: categories.error });
+        } else {
+          this.setState({ categories: categories, error: "" });
+        }
+      })
+      .catch(err => {
+        this.setState({ categories: [], error: err });
+      });
+  }
+
   render() {
+    const { categories } = this.state;
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div className="app">
+        <Route path="/" exact render={() => <Root categories={categories} />} />
       </div>
     );
   }
