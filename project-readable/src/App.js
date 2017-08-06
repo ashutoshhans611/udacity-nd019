@@ -4,41 +4,22 @@ import * as ReadableAPI from "./ReadableAPI";
 import RootView from "./components/RootView";
 import CategoryView from "./components/CategoryView";
 import PostView from "./components/PostView";
+import { connect } from "react-redux";
+import * as actions from "./actions";
 
 class App extends Component {
   state = {
-    categories: [],
     posts: []
   };
 
   componentDidMount() {
-    ReadableAPI.getCategories()
-      .then(categories => {
-        if (categories.error) {
-          this.setState({ categories: [], error: categories.error });
-        } else {
-          this.setState({ categories: categories, error: "" });
-        }
-      })
-      .catch(err => {
-        this.setState({ categories: [], error: err });
-      });
+    this.props.fetchCategories();
 
-    ReadableAPI.getAllPosts()
-      .then(posts => {
-        if (posts.error) {
-          this.setState({ posts: [], error: posts.error });
-        } else {
-          this.setState({ posts: posts, error: "" });
-        }
-      })
-      .catch(err => {
-        this.setState({ posts: [], error: err });
-      });
+    this.props.fetchAllPosts();
   }
 
   render() {
-    const { categories, posts } = this.state;
+    const { categories, posts } = this.props;
     return (
       <div className="app">
         <Route
@@ -59,4 +40,8 @@ class App extends Component {
   }
 }
 
-export default App;
+function mapStateToProps({ categories, posts }) {
+  return { categories: categories.categories, posts: posts.posts };
+}
+
+export default connect(mapStateToProps, actions)(App);
