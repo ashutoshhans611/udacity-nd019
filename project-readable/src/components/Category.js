@@ -1,20 +1,36 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import * as ReadableAPI from "../ReadableAPI";
 
-class Root extends Component {
+class Category extends Component {
   state = {
-    postOrdered: this.props.posts
+    postOrdered: []
   };
 
   componentWillReceiveProps(nextProps) {
-    const postOrdered = _.orderBy(nextProps.posts, ["voteScore"], ["desc"]);
-    this.setState({
-      postOrdered
-    });
+    ReadableAPI.getPosts(nextProps.match.params.categoryName)
+      .then(posts => {
+        if (posts.error) {
+          this.setState({ postOrdered: [], error: posts.error });
+        } else {
+          this.setState({
+            postOrdered: _.orderBy(posts, ["voteScore"], ["desc"]),
+            error: ""
+          });
+        }
+      })
+      .catch(err => {
+        this.setState({ postOrdered: [], error: err });
+      });
   }
+
+  componentWillUnmount() {
+    this.setState({ postOrdered: [] });
+  }
+
   changeOrder = key => {
-    const postOrdered = _.orderBy(this.props.posts, [key], ["desc"]);
+    const postOrdered = _.orderBy(this.state.postOrdered, [key], ["desc"]);
     this.setState({
       postOrdered
     });
@@ -51,7 +67,9 @@ class Root extends Component {
           {_.map(postOrdered, (post, key) =>
             <div className="post" key={post.id}>
               <h2 className="post-title">
-                {post.title}
+                <Link to={`/p/${post.id}`}>
+                  {post.title}
+                </Link>
               </h2>
               <div className="post-title">
                 {post.body}
@@ -64,4 +82,4 @@ class Root extends Component {
   }
 }
 
-export default Root;
+export default Category;

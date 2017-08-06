@@ -18,3 +18,18 @@ export const getAllPosts = () =>
   fetch(`${api}/posts`, { headers })
     .then(res => res.json())
     .then(posts => posts);
+
+export const getPosts = category =>
+  fetch(`${api}/${category}/posts`, { headers })
+    .then(res => res.json())
+    .then(posts => posts);
+
+export const getPost = id =>
+  fetch(`${api}/posts/${id}`, { headers })
+    .then(res => res.json())
+    .then(post => post);
+
+export const getComments = postId =>
+  fetch(`${api}/posts/${postId}/comments`, { headers })
+    .then(res => res.json())
+    .then(comments => comments);

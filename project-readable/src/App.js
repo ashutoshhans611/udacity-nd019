@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import * as ReadableAPI from "./ReadableAPI";
 import Root from "./components/Root";
+import Category from "./components/Category";
+import Post from "./components/Post";
 import "./App.css";
 
 class App extends Component {
@@ -44,6 +46,14 @@ class App extends Component {
           path="/"
           exact
           render={() => <Root categories={categories} posts={posts} />}
+        />
+        <Route
+          path="/c/:categoryName"
+          render={props => <Category {...props} categories={categories} />}
+        />
+        <Route
+          path="/p/:postId"
+          render={props => <Post {...props} categories={categories} />}
         />
       </div>
     );
