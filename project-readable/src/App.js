@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import * as ReadableAPI from "./ReadableAPI";
-import Root from "./components/Root";
-import Category from "./components/Category";
-import Post from "./components/Post";
-import "./App.css";
+import RootView from "./components/RootView";
+import CategoryView from "./components/CategoryView";
+import PostView from "./components/PostView";
 
 class App extends Component {
   state = {
@@ -45,15 +44,15 @@ class App extends Component {
         <Route
           path="/"
           exact
-          render={() => <Root categories={categories} posts={posts} />}
+          render={() => <RootView categories={categories} posts={posts} />}
         />
         <Route
           path="/c/:categoryName"
-          render={props => <Category {...props} categories={categories} />}
+          render={props => <CategoryView {...props} categories={categories} />}
         />
         <Route
           path="/p/:postId"
-          render={props => <Post {...props} categories={categories} />}
+          render={props => <PostView {...props} categories={categories} />}
         />
       </div>
     );
