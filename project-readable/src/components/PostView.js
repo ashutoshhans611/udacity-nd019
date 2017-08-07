@@ -1,6 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import * as ReadableAPI from "../ReadableAPI";
 import Timestamp from "react-timestamp";
 import {
@@ -17,12 +18,12 @@ import {
   Dropdown
 } from "semantic-ui-react";
 import AppHeader from "./AppHeader";
+import Comments from "./Comments";
 
 class PostView extends Component {
   state = {
     postId: "",
-    post: {},
-    comments: []
+    post: {}
   };
   componentDidMount() {
     if (this.props.match.params.postId === this.state.postId) {
@@ -44,21 +45,6 @@ class PostView extends Component {
       })
       .catch(err => {
         this.setState({ post: {}, error: err });
-      });
-
-    ReadableAPI.fetchComments(this.props.match.params.postId)
-      .then(comments => {
-        if (comments.error) {
-          this.setState({ comments: [], error: comments.error });
-        } else {
-          this.setState({
-            comments: _.orderBy(comments, ["voteScore"], ["desc"]),
-            error: ""
-          });
-        }
-      })
-      .catch(err => {
-        this.setState({ comments: [], error: err });
       });
   }
   componentWillReceiveProps(nextProps) {
@@ -82,36 +68,14 @@ class PostView extends Component {
       .catch(err => {
         this.setState({ post: {}, error: err });
       });
-
-    ReadableAPI.fetchComments(nextProps.match.params.postId)
-      .then(comments => {
-        if (comments.error) {
-          this.setState({ comments: [], error: comments.error });
-        } else {
-          this.setState({
-            comments: _.orderBy(comments, ["voteScore"], ["desc"]),
-            error: ""
-          });
-        }
-      })
-      .catch(err => {
-        this.setState({ comments: [], error: err });
-      });
   }
 
   componentWillUnmount() {
     this.setState({ postId: "" });
   }
 
-  changeOrder = key => {
-    const comments = _.orderBy(this.state.comments, [key], ["desc"]);
-    this.setState({
-      comments
-    });
-  };
-
   render() {
-    const { post, comments } = this.state;
+    const { post } = this.state;
     const { categories } = this.props;
 
     return (
@@ -126,70 +90,7 @@ class PostView extends Component {
           </p>
         </Container>
 
-        <Segment style={{ padding: "5em 0em" }} vertical>
-          <Container text>
-            <Comment.Group>
-              <Header as="h3" dividing>
-                Comments
-                <Button
-                  compact
-                  size="mini"
-                  onClick={() => this.changeOrder("voteScore")}
-                >
-                  Score
-                  <Icon name="sort descending" />
-                </Button>
-                <Button
-                  compact
-                  size="mini"
-                  onClick={() => this.changeOrder("timestamp")}
-                >
-                  Time
-                  <Icon name="sort descending" />
-                </Button>
-              </Header>
-
-              {_.map(comments, (comment, key) =>
-                <Comment key={comment.id}>
-                  <Comment.Content>
-                    <Comment.Author>
-                      {comment.author}
-                    </Comment.Author>
-                    <Comment.Metadata>
-                      <div>
-                        <Timestamp time={comment.timestamp / 1000} />
-                      </div>
-                      <div>
-                        <Icon name="star" />
-                        {comment.voteScore} Score
-                      </div>
-                    </Comment.Metadata>
-                    <Comment.Text>
-                      {comment.body}
-                    </Comment.Text>
-                    <Comment.Actions>
-                      <Comment.Action>
-                        <Icon name="thumbs outline up" />
-                      </Comment.Action>
-                      <Comment.Action>
-                        <Icon name="thumbs outline down" />
-                      </Comment.Action>
-                    </Comment.Actions>
-                  </Comment.Content>
-                </Comment>
-              )}
-              <Form reply>
-                <Form.TextArea />
-                <Button
-                  content="Add Comment"
-                  labelPosition="left"
-                  icon="edit"
-                  primary
-                />
-              </Form>
-            </Comment.Group>
-          </Container>
-        </Segment>
+        <Comments postId={post.id} />
       </div>
     );
   }

@@ -10,7 +10,7 @@ import AppHeader from "./AppHeader";
 class PostCreateView extends Component {
   onCreateButtonClick() {
     const { title, body, author, category } = this.props;
-    const id = "1cd";
+    const id = uuidv1();
     const timestamp = Date.now();
     this.props.postCreate({
       id,
