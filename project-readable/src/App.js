@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
+import { connect } from "react-redux";
 import * as ReadableAPI from "./ReadableAPI";
 import RootView from "./components/RootView";
 import CategoryView from "./components/CategoryView";
 import PostView from "./components/PostView";
-import { connect } from "react-redux";
+import PostCreateView from "./components/PostCreateView";
+import PostEditView from "./components/PostEditView";
 import * as actions from "./actions";
 
 class App extends Component {
@@ -29,11 +31,24 @@ class App extends Component {
         />
         <Route
           path="/c/:categoryName"
+          exact
           render={props => <CategoryView {...props} categories={categories} />}
         />
         <Route
           path="/p/:postId"
+          exact
           render={props => <PostView {...props} categories={categories} />}
+        />
+        <Route
+          path="/create_post"
+          exact
+          render={props =>
+            <PostCreateView {...props} categories={categories} />}
+        />
+        <Route
+          path="/p/:postId/edit"
+          exact
+          render={props => <PostEditView {...props} categories={categories} />}
         />
       </div>
     );

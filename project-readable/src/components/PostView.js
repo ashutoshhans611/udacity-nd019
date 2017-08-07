@@ -31,7 +31,7 @@ class PostView extends Component {
       this.setState({ postId: this.props.match.params.postId });
     }
 
-    ReadableAPI.getPost(this.props.match.params.postId)
+    ReadableAPI.fetchPost(this.props.match.params.postId)
       .then(post => {
         if (post.error) {
           this.setState({ post: {}, error: post.error });
@@ -46,9 +46,8 @@ class PostView extends Component {
         this.setState({ post: {}, error: err });
       });
 
-    ReadableAPI.getComments(this.props.match.params.postId)
+    ReadableAPI.fetchComments(this.props.match.params.postId)
       .then(comments => {
-        console.log(comments);
         if (comments.error) {
           this.setState({ comments: [], error: comments.error });
         } else {
@@ -69,7 +68,7 @@ class PostView extends Component {
       this.setState({ postId: nextProps.match.params.postId });
     }
 
-    ReadableAPI.getPost(nextProps.match.params.postId)
+    ReadableAPI.fetchPost(nextProps.match.params.postId)
       .then(post => {
         if (post.error) {
           this.setState({ post: {}, error: post.error });
@@ -84,9 +83,8 @@ class PostView extends Component {
         this.setState({ post: {}, error: err });
       });
 
-    ReadableAPI.getComments(nextProps.match.params.postId)
+    ReadableAPI.fetchComments(nextProps.match.params.postId)
       .then(comments => {
-        console.log(comments);
         if (comments.error) {
           this.setState({ comments: [], error: comments.error });
         } else {

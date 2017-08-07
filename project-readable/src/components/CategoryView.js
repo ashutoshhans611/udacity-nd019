@@ -12,7 +12,7 @@ class CategoryView extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    ReadableAPI.getPosts(nextProps.match.params.categoryName)
+    ReadableAPI.fetchPosts(nextProps.match.params.categoryName)
       .then(posts => {
         if (posts.error) {
           this.setState({ postOrdered: [], error: posts.error });
