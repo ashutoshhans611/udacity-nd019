@@ -1,7 +1,7 @@
 import {
   UPDATE_POST,
   CREATE_POST,
-  SAVE_POST,
+  EDIT_POST,
   DELETE_POST
 } from "../actions/types";
 
@@ -17,7 +17,7 @@ export default (state = INITIAL_STATE, action) => {
     case UPDATE_POST:
       return { ...state, [action.payload.prop]: action.payload.value };
     case CREATE_POST:
-    case SAVE_POST:
+    case EDIT_POST:
     case DELETE_POST:
       return INITIAL_STATE;
     default:

@@ -33,7 +33,7 @@ export const createPost = post =>
     body: JSON.stringify(post)
   }).then(res => res.json());
 
-export const updatePost = post =>
+export const editPost = post =>
   fetch(`${api}/posts/${post.id}`, {
     method: "PUT",
     headers: {
@@ -89,7 +89,7 @@ export const deleteComment = commentId =>
   fetch(`${api}/comments/${commentId}`, {
     method: "DELETE",
     headers
-  }).then(res => res.json());
+  }).then(res => res);
 
 export const voteComment = (commentId, option) =>
   fetch(`${api}/comments/${commentId}`, {

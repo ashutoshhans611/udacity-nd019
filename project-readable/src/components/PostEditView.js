@@ -2,38 +2,52 @@ import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Container, Form } from "semantic-ui-react";
-import { postUpdate, postSave, postDelete } from "../actions";
+import { postUpdate, postEdit, postFetch, postDelete } from "../actions";
 import PostForm from "./PostForm";
 import AppHeader from "./AppHeader";
 
 class PostEditView extends Component {
-  state = { showModal: false };
+  state = {
+    postId: ""
+  };
 
-  componentWillMount() {
-    _.each(this.props.post, (value, prop) => {
-      this.props.postUpdate({ prop, value });
-    });
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.match.params.postId !== "" &&
+      nextProps.match.params.postId !== this.state.postId
+    ) {
+      this.setState({ postId: nextProps.match.params.postId });
+      this.props.postFetch(nextProps.match.params.postId);
+    }
+
+    if (nextProps.post !== this.props.post) {
+      _.each(nextProps.post, (value, prop) => {
+        this.props.postUpdate({ prop, value });
+      });
+    }
   }
 
-  onSaveButtonPress() {
+  deletePost = () => {
+    this.props.postDelete(this.state.postId);
+    // this.props.history.push("/");
+    // window.location.href = window.location.href;
+  };
+
+  updatePost = () => {
     const { title, body, author, category } = this.props;
-    this.props.postSave({
+    const id = this.state.postId;
+    const timestamp = Date.now();
+    this.props.postEdit({
+      id,
+      timestamp,
       title,
       body,
       author,
-      category,
-      id: this.props.post.uid
+      category
     });
-  }
-
-  onAccept() {
-    const { uid } = this.props.post;
-    this.props.postDelete({ uid });
-  }
-
-  onDecline() {
-    this.setState({ showModal: false });
-  }
+    this.props.history.push(`/p/${id}`);
+    window.location.href = window.location.href;
+  };
 
   render() {
     const { categories } = this.props;
@@ -45,15 +59,11 @@ class PostEditView extends Component {
 
           <Form>
             <Form.Group widths="equal">
-              <Form.Button onPress={this.onSaveButtonPress.bind(this)}>
-                Save Changes
+              <Form.Button onClick={() => this.updatePost()}>
+                Update
               </Form.Button>
-
-              <Form.Button
-                onPress={() =>
-                  this.setState({ showModal: !this.state.showModal })}
-              >
-                Delete Post
+              <Form.Button onClick={() => this.deletePost()}>
+                Delete
               </Form.Button>
             </Form.Group>
           </Form>
@@ -63,13 +73,14 @@ class PostEditView extends Component {
   }
 }
 
-const mapStateToProps = ({ postForm }) => {
-  const { name, phone, shift } = postForm;
-  return { name, phone, shift };
+const mapStateToProps = ({ postForm, post }) => {
+  const { title, body, author, category } = postForm;
+  return { title, body, author, category, post };
 };
 
 export default connect(mapStateToProps, {
   postUpdate,
-  postSave,
+  postEdit,
+  postFetch,
   postDelete
 })(PostEditView);

@@ -3,7 +3,7 @@ import {
   FETCH_POST,
   UPDATE_POST,
   CREATE_POST,
-  SAVE_POST,
+  EDIT_POST,
   DELETE_POST,
   VOTE_POST
 } from "./types";
@@ -42,11 +42,13 @@ export const postUpdate = ({ prop, value }) => {
   };
 };
 
-export const postSave = post => {
-  return {
-    type: SAVE_POST,
-    payload: post
-  };
+export const postEdit = post => async dispatch => {
+  try {
+    let result = await ReadableAPI.editPost(post);
+    dispatch({ type: EDIT_POST, payload: result });
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export const postVote = (id, option) => async dispatch => {
