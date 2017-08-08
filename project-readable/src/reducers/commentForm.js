@@ -2,7 +2,8 @@ import {
   UPDATE_COMMENT,
   CREATE_COMMENT,
   SAVE_COMMENT,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  VOTE_COMMENT
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -17,6 +18,7 @@ export default (state = INITIAL_STATE, action) => {
     case CREATE_COMMENT:
     case SAVE_COMMENT:
     case DELETE_COMMENT:
+    case VOTE_COMMENT:
       return INITIAL_STATE;
     default:
       return state;

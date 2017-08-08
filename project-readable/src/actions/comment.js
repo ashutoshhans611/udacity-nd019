@@ -4,7 +4,8 @@ import {
   UPDATE_COMMENT,
   CREATE_COMMENT,
   SAVE_COMMENT,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  VOTE_COMMENT
 } from "./types";
 
 export const commentCreate = comment => async dispatch => {
@@ -37,9 +38,20 @@ export const commentSave = comment => {
   };
 };
 
-export const commentDelete = id => {
-  return {
-    type: DELETE_COMMENT,
-    payload: { id }
-  };
+export const commentDelete = id => async dispatch => {
+  try {
+    let result = await ReadableAPI.deleteComment(id);
+    dispatch({ type: CREATE_COMMENT, payload: result });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const commentVote = (id, option) => async dispatch => {
+  try {
+    let result = await ReadableAPI.voteComment(id, option);
+    dispatch({ type: VOTE_COMMENT, payload: result });
+  } catch (e) {
+    console.error(e);
+  }
 };

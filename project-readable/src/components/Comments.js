@@ -63,6 +63,16 @@ class Comments extends Component {
     this.props.fetchComments(parentId);
   }
 
+  deleteComment = id => {
+    this.props.commentDelete(id);
+    this.props.fetchComments(this.state.postId);
+  };
+
+  voteComment = (id, option) => {
+    this.props.commentVote(id, option);
+    this.props.fetchComments(this.state.postId);
+  };
+
   render() {
     const comments = _.orderBy(
       this.props.comments,
@@ -101,23 +111,46 @@ class Comments extends Component {
                     {comment.author}
                   </Comment.Author>
                   <Comment.Metadata>
-                    <div>
+                    <span>
                       <Timestamp time={comment.timestamp / 1000} />
-                    </div>
-                    <div>
-                      <Icon name="star" />
-                      {comment.voteScore} Score
-                    </div>
+                    </span>
+                    <Button icon compact size="mini">
+                      <Icon name="edit" />
+                    </Button>
+                    <Button
+                      icon
+                      compact
+                      size="mini"
+                      onClick={() => this.deleteComment(comment.id)}
+                    >
+                      <Icon name="delete" />
+                    </Button>
                   </Comment.Metadata>
                   <Comment.Text>
                     {comment.body}
                   </Comment.Text>
                   <Comment.Actions>
                     <Comment.Action>
-                      <Icon name="thumbs outline up" />
-                    </Comment.Action>
-                    <Comment.Action>
-                      <Icon name="thumbs outline down" />
+                      <span>
+                        Score: {comment.voteScore}
+                      </span>
+                      <Button
+                        icon
+                        compact
+                        size="mini"
+                        onClick={() => this.voteComment(comment.id, "upVote")}
+                      >
+                        <Icon name="thumbs outline up" />
+                      </Button>
+
+                      <Button
+                        icon
+                        compact
+                        size="mini"
+                        onClick={() => this.voteComment(comment.id, "downVote")}
+                      >
+                        <Icon name="thumbs outline down" />
+                      </Button>
                     </Comment.Action>
                   </Comment.Actions>
                 </Comment.Content>
