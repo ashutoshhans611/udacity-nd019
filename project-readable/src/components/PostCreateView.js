@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuidv1 from "uuid/v1";
-import { Redirect } from "react-router";
 import { postCreate } from "../actions";
 import PostForm from "./PostForm";
-import { Container, Button, Form } from "semantic-ui-react";
+import { Container, Form } from "semantic-ui-react";
 import AppHeader from "./AppHeader";
 
 class PostCreateView extends Component {

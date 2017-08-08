@@ -7,6 +7,7 @@ export const UPDATE_POST = "UPDATE_POST";
 export const CREATE_POST = "CREATE_POST";
 export const SAVE_POST = "SAVE_POST";
 export const DELETE_POST = "DELETE_POST";
+export const VOTE_POST = "VOTE_POST";
 
 export const FETCH_COMMENT = "FETCH_COMMENT";
 export const UPDATE_COMMENT = "UPDATE_COMMENT";

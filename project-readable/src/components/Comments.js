@@ -1,22 +1,18 @@
 import _ from "lodash";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+
 import { connect } from "react-redux";
 import uuidv1 from "uuid/v1";
-import * as ReadableAPI from "../ReadableAPI";
+
 import Timestamp from "react-timestamp";
 import {
-  Grid,
   Button,
   Comment,
   Form,
   Header,
-  Message,
   Icon,
   Container,
-  Segment,
-  Menu,
-  Dropdown
+  Segment
 } from "semantic-ui-react";
 import * as actions from "../actions";
 
@@ -47,7 +43,7 @@ class Comments extends Component {
   };
 
   onCreateButtonClick() {
-    const { title, body, author, category } = this.props;
+    const { body, author } = this.props;
     const id = uuidv1();
     const timestamp = Date.now();
     const parentId = this.state.postId;

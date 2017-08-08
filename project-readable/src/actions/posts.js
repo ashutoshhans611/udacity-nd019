@@ -9,3 +9,12 @@ export const fetchAllPosts = () => async dispatch => {
     console.error(e);
   }
 };
+
+export const fetchPosts = category => async dispatch => {
+  try {
+    let posts = await ReadableAPI.fetchPosts(category);
+    dispatch({ type: FETCH_POSTS, payload: { posts } });
+  } catch (e) {
+    console.error(e);
+  }
+};

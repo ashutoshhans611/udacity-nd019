@@ -1,32 +1,33 @@
 import _ from "lodash";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import Timestamp from "react-timestamp";
 import { Container, Item, Header, Button, Icon } from "semantic-ui-react";
 import AppHeader from "./AppHeader";
-import PostForm from "./PostForm";
+import * as actions from "../actions";
 
 class RootView extends Component {
   state = {
-    postOrdered: this.props.posts
+    orderKey: "voteScore"
   };
 
-  componentWillReceiveProps(nextProps) {
-    const postOrdered = _.orderBy(nextProps.posts, ["voteScore"], ["desc"]);
-    this.setState({
-      postOrdered
-    });
+  componentDidMount() {
+    this.props.fetchAllPosts();
   }
-  changeOrder = key => {
-    const postOrdered = _.orderBy(this.props.posts, [key], ["desc"]);
+
+  changeOrder = orderKey => {
     this.setState({
-      postOrdered
+      orderKey
     });
   };
 
   render() {
     const { categories } = this.props;
-    const { postOrdered } = this.state;
+    const posts = _.orderBy(
+      this.props.posts.filter(post => !post.deleted),
+      [this.state.orderKey],
+      ["desc"]
+    );
 
     return (
       <div>
@@ -57,7 +58,7 @@ class RootView extends Component {
           </Header>
 
           <Item.Group divided>
-            {_.map(postOrdered, (post, key) =>
+            {_.map(posts, (post, key) =>
               <Item key={post.id}>
                 <Item.Content>
                   <Item.Header as="a" href={`/p/${post.id}`}>
@@ -86,4 +87,8 @@ class RootView extends Component {
   }
 }
 
-export default RootView;
+function mapStateToProps({ posts }) {
+  return { posts: posts.posts };
+}
+
+export default connect(mapStateToProps, actions)(RootView);

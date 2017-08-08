@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import { connect } from "react-redux";
-import * as ReadableAPI from "./ReadableAPI";
 import RootView from "./components/RootView";
 import CategoryView from "./components/CategoryView";
 import PostView from "./components/PostView";
@@ -10,24 +9,18 @@ import PostEditView from "./components/PostEditView";
 import * as actions from "./actions";
 
 class App extends Component {
-  state = {
-    posts: []
-  };
-
   componentDidMount() {
     this.props.fetchCategories();
-
-    this.props.fetchAllPosts();
   }
 
   render() {
-    const { categories, posts } = this.props;
+    const { categories } = this.props;
     return (
       <div className="app">
         <Route
           path="/"
           exact
-          render={() => <RootView categories={categories} posts={posts} />}
+          render={() => <RootView categories={categories} />}
         />
         <Route
           path="/c/:categoryName"
@@ -55,8 +48,8 @@ class App extends Component {
   }
 }
 
-function mapStateToProps({ categories, posts }) {
-  return { categories: categories.categories, posts: posts.posts };
+function mapStateToProps({ categories }) {
+  return { categories: categories.categories };
 }
 
 export default connect(mapStateToProps, actions)(App);

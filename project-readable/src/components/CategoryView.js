@@ -1,99 +1,97 @@
 import _ from "lodash";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import * as ReadableAPI from "../ReadableAPI";
+import { connect } from "react-redux";
 import Timestamp from "react-timestamp";
-import { Item, Header, Button, Icon } from "semantic-ui-react";
+import { Container, Item, Header, Button, Icon } from "semantic-ui-react";
 import AppHeader from "./AppHeader";
+import * as actions from "../actions";
 
 class CategoryView extends Component {
   state = {
-    postOrdered: []
+    category: "",
+    orderKey: "voteScore"
   };
 
   componentWillReceiveProps(nextProps) {
-    ReadableAPI.fetchPosts(nextProps.match.params.categoryName)
-      .then(posts => {
-        if (posts.error) {
-          this.setState({ postOrdered: [], error: posts.error });
-        } else {
-          this.setState({
-            postOrdered: _.orderBy(posts, ["voteScore"], ["desc"]),
-            error: ""
-          });
-        }
-      })
-      .catch(err => {
-        this.setState({ postOrdered: [], error: err });
-      });
+    if (nextProps.match.params.categoryName === this.state.category) {
+      return;
+    } else {
+      this.setState({ category: nextProps.match.params.categoryName });
+    }
+
+    this.props.fetchPosts(nextProps.match.params.categoryName);
   }
 
-  componentWillUnmount() {
-    this.setState({ postOrdered: [] });
-  }
-
-  changeOrder = key => {
-    const postOrdered = _.orderBy(this.state.postOrdered, [key], ["desc"]);
+  changeOrder = orderKey => {
     this.setState({
-      postOrdered
+      orderKey
     });
   };
 
   render() {
-    const { categories, match } = this.props;
-    const { postOrdered } = this.state;
+    const { categories } = this.props;
+    const posts = _.orderBy(this.props.posts, [this.state.orderKey], ["desc"]);
 
     return (
       <div>
         <AppHeader categories={categories} />
 
-        <Header as="h3" dividing style={{ marginTop: "3em" }}>
-          {match.params.categoryName}'s Posts
-          <Button
-            compact
-            size="mini"
-            onClick={() => this.changeOrder("voteScore")}
-          >
-            Score
-            <Icon name="sort descending" />
-          </Button>
-          <Button
-            compact
-            size="mini"
-            onClick={() => this.changeOrder("timestamp")}
-          >
-            Time
-            <Icon name="sort descending" />
-          </Button>
-        </Header>
+        <Container text>
+          <Header as="h3" dividing style={{ marginTop: "3em" }}>
+            Posts
+            <Button
+              compact
+              size="mini"
+              onClick={() => this.changeOrder("voteScore")}
+            >
+              Score
+              <Icon name="sort descending" />
+            </Button>
+            <Button
+              compact
+              size="mini"
+              onClick={() => this.changeOrder("timestamp")}
+            >
+              Time
+              <Icon name="sort descending" />
+            </Button>
+            <Button as="a" href="/create_post">
+              New Post
+            </Button>
+          </Header>
 
-        <Item.Group divided>
-          {_.map(postOrdered, (post, key) =>
-            <Item key={post.id}>
-              <Item.Content>
-                <Item.Header as="a" href={`/p/${post.id}`}>
-                  {post.title}
-                </Item.Header>
-                <Item.Meta>
-                  {post.author}, <Timestamp time={post.timestamp / 1000} />
-                </Item.Meta>
-                <Item.Description>
-                  {post.body}
-                </Item.Description>
-                <Item.Extra>
-                  <div>
-                    Score: {post.voteScore}
-                    <Icon name="thumbs outline up" />
-                    <Icon name="thumbs outline down" />
-                  </div>
-                </Item.Extra>
-              </Item.Content>
-            </Item>
-          )}
-        </Item.Group>
+          <Item.Group divided>
+            {_.map(posts, (post, key) =>
+              <Item key={post.id}>
+                <Item.Content>
+                  <Item.Header as="a" href={`/p/${post.id}`}>
+                    {post.title}
+                  </Item.Header>
+                  <Item.Meta>
+                    {post.author}, <Timestamp time={post.timestamp / 1000} />
+                  </Item.Meta>
+                  <Item.Description>
+                    {post.body}
+                  </Item.Description>
+                  <Item.Extra>
+                    <div>
+                      Score: {post.voteScore}
+                      <Icon name="thumbs outline up" />
+                      <Icon name="thumbs outline down" />
+                    </div>
+                  </Item.Extra>
+                </Item.Content>
+              </Item>
+            )}
+          </Item.Group>
+        </Container>
       </div>
     );
   }
 }
 
-export default CategoryView;
+function mapStateToProps({ posts }) {
+  return { posts: posts.posts };
+}
+
+export default connect(mapStateToProps, actions)(CategoryView);

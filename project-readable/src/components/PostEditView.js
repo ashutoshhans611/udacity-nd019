@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Container, Button, Form } from "semantic-ui-react";
+import { Container, Form } from "semantic-ui-react";
 import { postUpdate, postSave, postDelete } from "../actions";
 import PostForm from "./PostForm";
 import AppHeader from "./AppHeader";

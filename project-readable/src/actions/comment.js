@@ -41,7 +41,7 @@ export const commentSave = comment => {
 export const commentDelete = id => async dispatch => {
   try {
     let result = await ReadableAPI.deleteComment(id);
-    dispatch({ type: CREATE_COMMENT, payload: result });
+    dispatch({ type: DELETE_COMMENT, payload: result });
   } catch (e) {
     console.error(e);
   }
