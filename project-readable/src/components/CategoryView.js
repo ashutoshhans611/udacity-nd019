@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Timestamp from "react-timestamp";
 import { Container, Item, Header, Button, Icon } from "semantic-ui-react";
 import AppHeader from "./AppHeader";
+import PostItem from "./PostItem";
 import * as actions from "../actions";
 
 class CategoryView extends Component {
@@ -14,6 +15,10 @@ class CategoryView extends Component {
   componentWillUnMount() {
     this.props.changePostOrder("");
   }
+
+  votePost = (id, option) => {
+    this.props.postVote(id, option);
+  };
 
   render() {
     const { categories, orderKey } = this.props;
@@ -53,26 +58,7 @@ class CategoryView extends Component {
 
           <Item.Group divided>
             {_.map(posts, (post, key) =>
-              <Item key={post.id}>
-                <Item.Content>
-                  <Item.Header as="a" href={`/p/${post.id}`}>
-                    {post.title}
-                  </Item.Header>
-                  <Item.Meta>
-                    {post.author}, <Timestamp time={post.timestamp / 1000} />
-                  </Item.Meta>
-                  <Item.Description>
-                    {post.body}
-                  </Item.Description>
-                  <Item.Extra>
-                    <div>
-                      Score: {post.voteScore}
-                      <Icon name="thumbs outline up" />
-                      <Icon name="thumbs outline down" />
-                    </div>
-                  </Item.Extra>
-                </Item.Content>
-              </Item>
+              <PostItem key={post.id} post={post} votePost={this.votePost} />
             )}
           </Item.Group>
         </Container>

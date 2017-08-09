@@ -17,11 +17,6 @@ class PostView extends Component {
     window.location.href = window.location.href;
   };
 
-  votePost = (id, option) => {
-    this.props.postVote(id, option);
-    this.props.postFetch(id);
-  };
-
   render() {
     const { categories, post } = this.props;
 
@@ -55,7 +50,7 @@ class PostView extends Component {
               icon
               compact
               size="mini"
-              onClick={() => this.votePost(post.id, "upVote")}
+              onClick={() => this.props.postVote(post.id, "upVote")}
             >
               <Icon name="thumbs outline up" />
             </Button>
@@ -64,7 +59,7 @@ class PostView extends Component {
               icon
               compact
               size="mini"
-              onClick={() => this.votePost(post.id, "downVote")}
+              onClick={() => this.props.postVote(post.id, "downVote")}
             >
               <Icon name="thumbs outline down" />
             </Button>

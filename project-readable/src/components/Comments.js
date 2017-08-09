@@ -14,6 +14,7 @@ import {
   Container,
   Segment
 } from "semantic-ui-react";
+import CommentModal from "./CommentModal";
 import * as actions from "../actions";
 
 class Comments extends Component {
@@ -95,9 +96,8 @@ class Comments extends Component {
                     <span>
                       <Timestamp time={comment.timestamp / 1000} />
                     </span>
-                    <Button icon compact size="mini">
-                      <Icon name="edit" />
-                    </Button>
+
+                    <CommentModal comment={comment} />
                     <Button
                       icon
                       compact
