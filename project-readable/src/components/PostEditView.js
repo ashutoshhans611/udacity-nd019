@@ -7,19 +7,11 @@ import PostForm from "./PostForm";
 import AppHeader from "./AppHeader";
 
 class PostEditView extends Component {
-  state = {
-    postId: ""
-  };
+  componentWillMount() {
+    this.props.postFetch(this.props.match.params.postId);
+  }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.match.params.postId !== "" &&
-      nextProps.match.params.postId !== this.state.postId
-    ) {
-      this.setState({ postId: nextProps.match.params.postId });
-      this.props.postFetch(nextProps.match.params.postId);
-    }
-
     if (nextProps.post !== this.props.post) {
       _.each(nextProps.post, (value, prop) => {
         this.props.postUpdate({ prop, value });
@@ -28,14 +20,14 @@ class PostEditView extends Component {
   }
 
   deletePost = () => {
-    this.props.postDelete(this.state.postId);
-    // this.props.history.push("/");
-    // window.location.href = window.location.href;
+    this.props.postDelete(this.props.match.params.postId);
+    this.props.history.push("/");
+    window.location.href = window.location.href;
   };
 
   updatePost = () => {
     const { title, body, author, category } = this.props;
-    const id = this.state.postId;
+    const id = this.props.match.params.postId;
     const timestamp = Date.now();
     this.props.postEdit({
       id,

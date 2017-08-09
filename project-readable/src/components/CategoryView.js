@@ -7,30 +7,21 @@ import AppHeader from "./AppHeader";
 import * as actions from "../actions";
 
 class CategoryView extends Component {
-  state = {
-    category: "",
-    orderKey: "voteScore"
-  };
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.categoryName === this.state.category) {
-      return;
-    } else {
-      this.setState({ category: nextProps.match.params.categoryName });
-    }
-
-    this.props.fetchPosts(nextProps.match.params.categoryName);
+  componentWillMount() {
+    this.props.fetchPosts(this.props.match.params.categoryName);
   }
 
-  changeOrder = orderKey => {
-    this.setState({
-      orderKey
-    });
-  };
+  componentWillUnMount() {
+    this.props.changePostOrder("");
+  }
 
   render() {
-    const { categories } = this.props;
-    const posts = _.orderBy(this.props.posts, [this.state.orderKey], ["desc"]);
+    const { categories, orderKey } = this.props;
+    const posts = _.orderBy(
+      this.props.posts.filter(post => !post.deleted),
+      [orderKey.post],
+      ["desc"]
+    );
 
     return (
       <div>
@@ -42,7 +33,7 @@ class CategoryView extends Component {
             <Button
               compact
               size="mini"
-              onClick={() => this.changeOrder("voteScore")}
+              onClick={() => this.props.changePostOrder("voteScore")}
             >
               Score
               <Icon name="sort descending" />
@@ -50,7 +41,7 @@ class CategoryView extends Component {
             <Button
               compact
               size="mini"
-              onClick={() => this.changeOrder("timestamp")}
+              onClick={() => this.props.changePostOrder("timestamp")}
             >
               Time
               <Icon name="sort descending" />
@@ -90,8 +81,8 @@ class CategoryView extends Component {
   }
 }
 
-function mapStateToProps({ posts }) {
-  return { posts: posts.posts };
+function mapStateToProps({ posts, orderKey }) {
+  return { posts, orderKey };
 }
 
 export default connect(mapStateToProps, actions)(CategoryView);

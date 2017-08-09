@@ -6,6 +6,7 @@ import post from "./post";
 import postForm from "./postForm";
 import comments from "./comments";
 import commentForm from "./commentForm";
+import orderKey from "./orderKey";
 
 export default combineReducers({
   categories,
@@ -13,5 +14,6 @@ export default combineReducers({
   post,
   postForm,
   comments,
-  commentForm
+  commentForm,
+  orderKey
 });

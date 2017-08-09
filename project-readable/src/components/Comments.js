@@ -17,36 +17,19 @@ import {
 import * as actions from "../actions";
 
 class Comments extends Component {
-  state = {
-    postId: "",
-    orderKey: "voteScore"
-  };
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.postId === this.state.postId) {
-      return;
-    } else {
-      this.setState({ postId: nextProps.postId });
-    }
-
-    this.props.fetchComments(nextProps.postId);
+  componentWillMount() {
+    this.props.fetchComments(this.props.postId);
   }
 
-  componentWillUnmount() {
-    this.setState({ postId: "" });
+  componentWillUnMount() {
+    this.props.changeCommentOrder("");
   }
-
-  changeOrder = orderKey => {
-    this.setState({
-      orderKey
-    });
-  };
 
   onCreateButtonClick() {
     const { body, author } = this.props;
     const id = uuidv1();
     const timestamp = Date.now();
-    const parentId = this.state.postId;
+    const parentId = this.props.postId;
 
     this.props.commentCreate({
       id,
@@ -61,18 +44,20 @@ class Comments extends Component {
 
   deleteComment = id => {
     this.props.commentDelete(id);
-    this.props.fetchComments(this.state.postId);
+    this.props.fetchComments(this.props.postId);
   };
 
   voteComment = (id, option) => {
     this.props.commentVote(id, option);
-    this.props.fetchComments(this.state.postId);
+    this.props.fetchComments(this.props.postId);
   };
 
   render() {
+    const { orderKey } = this.props;
+
     const comments = _.orderBy(
       this.props.comments,
-      [this.state.orderKey],
+      [orderKey.comment],
       ["desc"]
     );
 
@@ -85,7 +70,7 @@ class Comments extends Component {
               <Button
                 compact
                 size="mini"
-                onClick={() => this.changeOrder("voteScore")}
+                onClick={() => this.props.changeCommentOrder("voteScore")}
               >
                 Score
                 <Icon name="sort descending" />
@@ -93,7 +78,7 @@ class Comments extends Component {
               <Button
                 compact
                 size="mini"
-                onClick={() => this.changeOrder("timestamp")}
+                onClick={() => this.props.changeCommentOrder("timestamp")}
               >
                 Time
                 <Icon name="sort descending" />
@@ -188,9 +173,9 @@ class Comments extends Component {
   }
 }
 
-function mapStateToProps({ comments, commentForm }) {
+function mapStateToProps({ comments, commentForm, orderKey }) {
   const { body, author } = commentForm;
-  return { comments: comments.comments, body, author };
+  return { orderKey, comments, body, author };
 }
 
 export default connect(mapStateToProps, actions)(Comments);

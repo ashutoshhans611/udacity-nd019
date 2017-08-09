@@ -1,8 +1,6 @@
 import { FETCH_POST } from "../actions/types";
 
-const INITIAL_STATE = {
-  post: {}
-};
+const INITIAL_STATE = {};
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {

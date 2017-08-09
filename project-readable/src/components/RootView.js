@@ -7,25 +7,19 @@ import AppHeader from "./AppHeader";
 import * as actions from "../actions";
 
 class RootView extends Component {
-  state = {
-    orderKey: "voteScore"
-  };
-
-  componentDidMount() {
+  componentWillMount() {
     this.props.fetchAllPosts();
   }
 
-  changeOrder = orderKey => {
-    this.setState({
-      orderKey
-    });
-  };
+  componentWillUnMount() {
+    this.props.changePostOrder("");
+  }
 
   render() {
-    const { categories } = this.props;
+    const { categories, orderKey } = this.props;
     const posts = _.orderBy(
       this.props.posts.filter(post => !post.deleted),
-      [this.state.orderKey],
+      [orderKey.post],
       ["desc"]
     );
 
@@ -39,7 +33,7 @@ class RootView extends Component {
             <Button
               compact
               size="mini"
-              onClick={() => this.changeOrder("voteScore")}
+              onClick={() => this.props.changePostOrder("voteScore")}
             >
               Score
               <Icon name="sort descending" />
@@ -47,7 +41,7 @@ class RootView extends Component {
             <Button
               compact
               size="mini"
-              onClick={() => this.changeOrder("timestamp")}
+              onClick={() => this.props.changePostOrder("timestamp")}
             >
               Time
               <Icon name="sort descending" />
@@ -87,8 +81,8 @@ class RootView extends Component {
   }
 }
 
-function mapStateToProps({ posts }) {
-  return { posts: posts.posts };
+function mapStateToProps({ posts, changePostOrder, orderKey }) {
+  return { posts, changePostOrder, orderKey };
 }
 
 export default connect(mapStateToProps, actions)(RootView);

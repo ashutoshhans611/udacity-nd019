@@ -49,7 +49,7 @@ class App extends Component {
 }
 
 function mapStateToProps({ categories }) {
-  return { categories: categories.categories };
+  return { categories };
 }
 
 export default connect(mapStateToProps, actions)(App);

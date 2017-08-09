@@ -7,18 +7,8 @@ import Comments from "./Comments";
 import * as actions from "../actions";
 
 class PostView extends Component {
-  state = {
-    postId: ""
-  };
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.postId === this.state.postId) {
-      return;
-    } else {
-      this.setState({ postId: nextProps.match.params.postId });
-    }
-
-    this.props.postFetch(nextProps.match.params.postId);
+  componentWillMount() {
+    this.props.postFetch(this.props.match.params.postId);
   }
 
   deletePost = id => {
@@ -89,7 +79,7 @@ class PostView extends Component {
             </Button>
           </Segment>
         </Container>
-        <Comments postId={post.id} />
+        <Comments postId={this.props.match.params.postId} />
       </div>
     );
   }
