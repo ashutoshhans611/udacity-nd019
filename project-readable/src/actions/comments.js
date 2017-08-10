@@ -1,7 +1,6 @@
 import * as ReadableAPI from "../ReadableAPI";
 import {
   FETCH_COMMENTS,
-  FETCH_COMMENT,
   CREATE_COMMENT,
   EDIT_COMMENT,
   DELETE_COMMENT,
@@ -28,13 +27,6 @@ export const commentCreate = comment => async dispatch => {
   } catch (e) {
     console.error(e);
   }
-};
-
-export const commentFetch = id => {
-  return {
-    type: FETCH_COMMENT,
-    payload: { id }
-  };
 };
 
 export const commentEdit = comment => async dispatch => {

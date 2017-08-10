@@ -11,9 +11,9 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UPDATE_POST_ORDER_KEY:
-      return { ...state, post: action.payload };
+      return { ...state, post: action.orderKey };
     case UPDATE_COMMENT_ORDER_KEY:
-      return { ...state, comment: action.payload };
+      return { ...state, comment: action.orderKey };
     default:
       return state;
   }

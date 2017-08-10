@@ -4,7 +4,7 @@ import { FETCH_CATEGORIES } from "./types";
 export const fetchCategories = () => async dispatch => {
   try {
     let categories = await ReadableAPI.fetchCategories();
-    dispatch({ type: FETCH_CATEGORIES, payload: categories });
+    dispatch({ type: FETCH_CATEGORIES, categories });
   } catch (e) {
     console.error(e);
   }
