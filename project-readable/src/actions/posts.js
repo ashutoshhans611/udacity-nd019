@@ -45,10 +45,10 @@ export const postCreate = post => async dispatch => {
   }
 };
 
-export const postDelete = id => async dispatch => {
+export const postDelete = post => async dispatch => {
   try {
-    let result = await ReadableAPI.deletePost(id);
-    dispatch({ type: DELETE_POST, post: result });
+    let result = await ReadableAPI.deletePost(post.id);
+    dispatch({ type: DELETE_POST, post: post });
   } catch (e) {
     console.error(e);
   }

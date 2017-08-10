@@ -25,7 +25,11 @@ class PostEditView extends Component {
   }
 
   deletePost = () => {
-    this.props.postDelete(this.props.match.params.postId);
+    const post = _.find(
+      this.props.posts,
+      p => p.id === this.props.match.params.postId
+    );
+    this.props.postDelete(post);
     this.props.history.push("/");
     window.location.href = window.location.href;
   };

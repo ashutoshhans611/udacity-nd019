@@ -46,6 +46,25 @@ class PostItem extends Component {
             <div>
               Comments: {comments[post.id] ? comments[post.id].length : 0}
             </div>
+            <div>
+              <Button
+                icon
+                compact
+                size="mini"
+                as="a"
+                href={`/p/${post.id}/edit`}
+              >
+                <Icon name="edit" />
+              </Button>
+              <Button
+                icon
+                compact
+                size="mini"
+                onClick={() => this.props.postDelete(post)}
+              >
+                <Icon name="delete" />
+              </Button>
+            </div>
           </Item.Extra>
         </Item.Content>
       </Item>

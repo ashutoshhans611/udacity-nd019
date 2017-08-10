@@ -12,8 +12,8 @@ class PostView extends Component {
     this.props.postFetch(this.props.match.params.postId);
   }
 
-  deletePost = id => {
-    this.props.postDelete(id);
+  deletePost = post => {
+    this.props.postDelete(post);
     this.props.history.push("/");
     window.location.href = window.location.href;
   };
@@ -83,7 +83,7 @@ class PostView extends Component {
                     icon
                     compact
                     size="mini"
-                    onClick={() => this.deletePost(post.id)}
+                    onClick={() => this.deletePost(post)}
                   >
                     <Icon name="delete" />
                   </Button>

@@ -1,12 +1,12 @@
 Project Readable
 
-## install and start
+## installing and launching client
 ```
 yarn
 yarn start
 ```
 
-## install and start server
+## installing and launching server
 ```
 git submodule update --init
 cd Server
