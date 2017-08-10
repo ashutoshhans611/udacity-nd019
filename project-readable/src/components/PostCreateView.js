@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuidv1 from "uuid/v1";
-import { postCreate } from "../actions";
+import * as actions from "../actions";
 import PostForm from "./PostForm";
 import { Container, Form } from "semantic-ui-react";
 import AppHeader from "./AppHeader";
@@ -49,4 +49,4 @@ const mapStateToProps = ({ postForm }) => {
   return { title, body, author, category };
 };
 
-export default connect(mapStateToProps, { postCreate })(PostCreateView);
+export default connect(mapStateToProps, actions)(PostCreateView);

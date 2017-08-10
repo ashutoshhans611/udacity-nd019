@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Container, Form } from "semantic-ui-react";
-import { postUpdate, postEdit, postFetch, postDelete } from "../actions";
+import * as actions from "../actions";
 import PostForm from "./PostForm";
 import AppHeader from "./AppHeader";
 
@@ -76,9 +76,4 @@ const mapStateToProps = ({ postForm, posts }) => {
   return { title, body, author, category, posts };
 };
 
-export default connect(mapStateToProps, {
-  postUpdate,
-  postEdit,
-  postFetch,
-  postDelete
-})(PostEditView);
+export default connect(mapStateToProps, actions)(PostEditView);

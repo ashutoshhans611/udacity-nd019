@@ -62,8 +62,8 @@ class RootView extends Component {
   }
 }
 
-function mapStateToProps({ posts, changePostOrder, orderKey }) {
-  return { posts, changePostOrder, orderKey };
+function mapStateToProps({ posts, orderKey }) {
+  return { posts, orderKey };
 }
 
 export default connect(mapStateToProps, actions)(RootView);

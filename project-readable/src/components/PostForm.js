@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Form } from "semantic-ui-react";
-import { postUpdate } from "../actions";
+import * as actions from "../actions";
 
 class PostForm extends Component {
   render() {
@@ -56,4 +56,4 @@ const mapStateToProps = ({ postForm }) => {
   return { title, body, author, category };
 };
 
-export default connect(mapStateToProps, { postUpdate })(PostForm);
+export default connect(mapStateToProps, actions)(PostForm);
