@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Timestamp from "react-timestamp";
 import { Container, Item, Header, Button, Icon } from "semantic-ui-react";
 import AppHeader from "./AppHeader";
 import PostItem from "./PostItem";

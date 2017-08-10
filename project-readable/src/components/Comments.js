@@ -40,24 +40,24 @@ class Comments extends Component {
       parentId
     });
 
-    this.props.fetchComments(parentId);
+    // this.props.fetchComments(parentId);
   }
 
-  deleteComment = id => {
-    this.props.commentDelete(id);
-    this.props.fetchComments(this.props.postId);
+  deleteComment = comment => {
+    this.props.commentDelete(comment);
+    // this.props.fetchComments(this.props.postId);
   };
 
   voteComment = (id, option) => {
     this.props.commentVote(id, option);
-    this.props.fetchComments(this.props.postId);
+    // this.props.fetchComments(this.props.postId);
   };
 
   render() {
     const { orderKey } = this.props;
 
     const comments = _.orderBy(
-      this.props.comments,
+      this.props.comments[this.props.postId],
       [orderKey.comment],
       ["desc"]
     );
@@ -102,7 +102,7 @@ class Comments extends Component {
                       icon
                       compact
                       size="mini"
-                      onClick={() => this.deleteComment(comment.id)}
+                      onClick={() => this.deleteComment(comment)}
                     >
                       <Icon name="delete" />
                     </Button>

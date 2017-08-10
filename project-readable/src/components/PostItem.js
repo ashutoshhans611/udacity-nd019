@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Timestamp from "react-timestamp";
-import { Container, Item, Header, Button, Icon } from "semantic-ui-react";
+import { Item, Button, Icon } from "semantic-ui-react";
 import * as actions from "../actions";
 
 class PostItem extends Component {
@@ -45,7 +45,7 @@ class PostItem extends Component {
               </Button>
             </div>
             <div>
-              Comments: {comments.length}
+              Comments: {_.filter(comments, c => c.parentId === post.id).length}
             </div>
           </Item.Extra>
         </Item.Content>

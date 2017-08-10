@@ -9,7 +9,7 @@ import PostEditView from "./components/PostEditView";
 import * as actions from "./actions";
 
 class App extends Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.fetchCategories();
   }
 
