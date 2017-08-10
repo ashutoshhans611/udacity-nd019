@@ -8,14 +8,14 @@ import AppHeader from "./AppHeader";
 
 class PostEditView extends Component {
   componentWillMount() {
-    this.props.postFetch(this.props.match.params.postId);
+    this.props.postFetch(this.props.match.params.post_id);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.posts !== this.props.posts) {
       const post = _.find(
         nextProps.posts,
-        p => p.id === this.props.match.params.postId
+        p => p.id === this.props.match.params.post_id
       );
 
       _.each(post, (value, prop) => {
@@ -27,7 +27,7 @@ class PostEditView extends Component {
   deletePost = () => {
     const post = _.find(
       this.props.posts,
-      p => p.id === this.props.match.params.postId
+      p => p.id === this.props.match.params.post_id
     );
     this.props.postDelete(post);
     this.props.history.push("/");
@@ -36,7 +36,7 @@ class PostEditView extends Component {
 
   updatePost = () => {
     const { title, body, author, category } = this.props;
-    const id = this.props.match.params.postId;
+    const id = this.props.match.params.post_id;
     const timestamp = Date.now();
     this.props.postEdit({
       id,
@@ -46,7 +46,7 @@ class PostEditView extends Component {
       author,
       category
     });
-    this.props.history.push(`/p/${id}`);
+    this.props.history.push(`/${category}/${id}`);
     window.location.href = window.location.href;
   };
 

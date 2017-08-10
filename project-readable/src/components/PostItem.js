@@ -14,7 +14,7 @@ class PostItem extends Component {
     return (
       <Item key={post.id}>
         <Item.Content>
-          <Item.Header as="a" href={`/p/${post.id}`}>
+          <Item.Header as="a" href={`/${post.category}/${post.id}`}>
             {post.title}
           </Item.Header>
           <Item.Meta>
@@ -52,7 +52,7 @@ class PostItem extends Component {
                 compact
                 size="mini"
                 as="a"
-                href={`/p/${post.id}/edit`}
+                href={`/${post.category}/${post.id}/edit`}
               >
                 <Icon name="edit" />
               </Button>

@@ -23,12 +23,12 @@ class App extends Component {
           render={() => <RootView categories={categories} />}
         />
         <Route
-          path="/c/:categoryName"
+          path="/:category"
           exact
           render={props => <CategoryView {...props} categories={categories} />}
         />
         <Route
-          path="/p/:postId"
+          path="/:category/:post_id"
           exact
           render={props => <PostView {...props} categories={categories} />}
         />
@@ -39,7 +39,7 @@ class App extends Component {
             <PostCreateView {...props} categories={categories} />}
         />
         <Route
-          path="/p/:postId/edit"
+          path="/:category/:post_id/edit"
           exact
           render={props => <PostEditView {...props} categories={categories} />}
         />

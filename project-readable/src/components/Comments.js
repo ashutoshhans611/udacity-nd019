@@ -19,7 +19,7 @@ import * as actions from "../actions";
 
 class Comments extends Component {
   componentWillMount() {
-    this.props.fetchComments(this.props.postId);
+    this.props.fetchComments(this.props.post_id);
   }
 
   componentWillUnMount() {
@@ -31,7 +31,7 @@ class Comments extends Component {
     const { body, author } = this.props;
     const id = uuidv1();
     const timestamp = Date.now();
-    const parentId = this.props.postId;
+    const parentId = this.props.post_id;
 
     this.props.commentCreate({
       id,
@@ -46,19 +46,19 @@ class Comments extends Component {
 
   deleteComment = comment => {
     this.props.commentDelete(comment);
-    // this.props.fetchComments(this.props.postId);
+    // this.props.fetchComments(this.props.post_id);
   };
 
   voteComment = (id, option) => {
     this.props.commentVote(id, option);
-    // this.props.fetchComments(this.props.postId);
+    // this.props.fetchComments(this.props.post_id);
   };
 
   render() {
     const { orderKey } = this.props;
 
     const comments = _.orderBy(
-      this.props.comments[this.props.postId],
+      this.props.comments[this.props.post_id],
       [orderKey.comment],
       ["desc"]
     );

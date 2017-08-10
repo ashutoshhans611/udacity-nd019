@@ -11,10 +11,10 @@ import {
   RESET_COMMENT_EDIT_FORM
 } from "./types";
 
-export const fetchComments = postId => async dispatch => {
+export const fetchComments = post_id => async dispatch => {
   try {
-    let comments = await ReadableAPI.fetchComments(postId);
-    dispatch({ type: FETCH_COMMENTS, postId, comments });
+    let comments = await ReadableAPI.fetchComments(post_id);
+    dispatch({ type: FETCH_COMMENTS, post_id, comments });
   } catch (e) {
     console.error(e);
   }
@@ -43,7 +43,7 @@ export const commentDelete = comment => async dispatch => {
     await ReadableAPI.deleteComment(comment.id);
     dispatch({
       type: DELETE_COMMENT,
-      postId: comment.parentId,
+      post_id: comment.parentId,
       commentId: comment.id
     });
   } catch (e) {

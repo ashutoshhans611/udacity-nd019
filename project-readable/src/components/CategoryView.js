@@ -8,7 +8,7 @@ import * as actions from "../actions";
 
 class CategoryView extends Component {
   componentWillMount() {
-    this.props.fetchPosts(this.props.match.params.categoryName);
+    this.props.fetchPosts(this.props.match.params.category);
   }
 
   componentWillUnMount() {

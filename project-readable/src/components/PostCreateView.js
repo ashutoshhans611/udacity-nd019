@@ -19,7 +19,7 @@ class PostCreateView extends Component {
       author,
       category
     });
-    this.props.history.push(`/p/${id}`);
+    this.props.history.push(`/${category}/${id}`);
     window.location.href = window.location.href;
   }
 

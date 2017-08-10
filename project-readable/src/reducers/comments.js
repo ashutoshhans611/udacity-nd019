@@ -12,7 +12,7 @@ const INITIAL_STATE = {};
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FETCH_COMMENTS:
-      return { ...state, [action.postId]: action.comments };
+      return { ...state, [action.post_id]: action.comments };
     case CREATE_COMMENT:
     case EDIT_COMMENT:
     case VOTE_COMMENT:
@@ -26,8 +26,8 @@ export default function(state = INITIAL_STATE, action) {
     case DELETE_COMMENT:
       return {
         ...state,
-        [action.postId]: _.filter(
-          state[action.postId],
+        [action.post_id]: _.filter(
+          state[action.post_id],
           c => c.id !== action.commentId
         )
       };

@@ -9,7 +9,7 @@ import * as actions from "../actions";
 
 class PostView extends Component {
   componentWillMount() {
-    this.props.postFetch(this.props.match.params.postId);
+    this.props.postFetch(this.props.match.params.post_id);
   }
 
   deletePost = post => {
@@ -20,7 +20,7 @@ class PostView extends Component {
 
   render() {
     const { categories, posts } = this.props;
-    const post = _.find(posts, p => p.id === this.props.match.params.postId);
+    const post = _.find(posts, p => p.id === this.props.match.params.post_id);
 
     return (
       <div>
@@ -75,7 +75,7 @@ class PostView extends Component {
                     compact
                     size="mini"
                     as="a"
-                    href={`/p/${post.id}/edit`}
+                    href={`/${post.category}/${post.id}/edit`}
                   >
                     <Icon name="edit" />
                   </Button>
@@ -88,7 +88,7 @@ class PostView extends Component {
                     <Icon name="delete" />
                   </Button>
                 </Segment>
-                <Comments postId={this.props.match.params.postId} />
+                <Comments post_id={this.props.match.params.post_id} />
               </Container>
             );
         })()}

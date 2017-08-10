@@ -16,7 +16,7 @@ const AppHeader = props =>
             <Dropdown.Item
               key={category.name}
               as="a"
-              href={`/c/${category.name}`}
+              href={`/${category.name}`}
             >
               {category.name}
             </Dropdown.Item>

@@ -43,15 +43,15 @@ export const editPost = post =>
     body: JSON.stringify(post)
   }).then(res => res.json());
 
-export const deletePost = postId =>
-  fetch(`${api}/posts/${postId}`, {
+export const deletePost = post_id =>
+  fetch(`${api}/posts/${post_id}`, {
     method: "DELETE",
     headers
     //}).then(res => res.json());
   }).then(res => true);
 
-export const votePost = (postId, option) =>
-  fetch(`${api}/posts/${postId}`, {
+export const votePost = (post_id, option) =>
+  fetch(`${api}/posts/${post_id}`, {
     method: "POST",
     headers: {
       ...headers,
@@ -60,8 +60,8 @@ export const votePost = (postId, option) =>
     body: JSON.stringify({ option })
   }).then(res => res.json());
 
-export const fetchComments = postId =>
-  fetch(`${api}/posts/${postId}/comments`, { headers }).then(res => res.json());
+export const fetchComments = post_id =>
+  fetch(`${api}/posts/${post_id}/comments`, { headers }).then(res => res.json());
 
 export const fetchComment = id =>
   fetch(`${api}/comments/${id}`, { headers }).then(res => res.json());
