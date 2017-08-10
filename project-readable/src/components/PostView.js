@@ -21,6 +21,7 @@ class PostView extends Component {
   render() {
     const { categories, posts } = this.props;
     const post = _.find(posts, p => p.id === this.props.match.params.postId);
+
     return (
       <div>
         <AppHeader categories={categories} />
@@ -67,7 +68,17 @@ class PostView extends Component {
                   >
                     <Icon name="thumbs outline down" />
                   </Button>
-
+                </Segment>
+                <Segment vertical>
+                  <Button
+                    icon
+                    compact
+                    size="mini"
+                    as="a"
+                    href={`/p/${post.id}/edit`}
+                  >
+                    <Icon name="edit" />
+                  </Button>
                   <Button
                     icon
                     compact
@@ -86,8 +97,8 @@ class PostView extends Component {
   }
 }
 
-function mapStateToProps(post) {
-  return post;
+function mapStateToProps({ posts }) {
+  return { posts };
 }
 
 export default connect(mapStateToProps, actions)(PostView);

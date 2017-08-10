@@ -3,10 +3,13 @@ import {
   FETCH_COMMENTS,
   FETCH_COMMENT,
   CREATE_COMMENT,
-  SAVE_COMMENT,
+  EDIT_COMMENT,
   DELETE_COMMENT,
   VOTE_COMMENT,
-  UPDATE_COMMENT
+  UPDATE_COMMENT_FORM,
+  RESET_COMMENT_FORM,
+  UPDATE_COMMENT_EDIT_FORM,
+  RESET_COMMENT_EDIT_FORM
 } from "./types";
 
 export const fetchComments = postId => async dispatch => {
@@ -34,11 +37,13 @@ export const commentFetch = id => {
   };
 };
 
-export const commentSave = comment => {
-  return {
-    type: SAVE_COMMENT,
-    payload: comment
-  };
+export const commentEdit = comment => async dispatch => {
+  try {
+    let result = await ReadableAPI.editComment(comment);
+    dispatch({ type: EDIT_COMMENT, comment: result });
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export const commentDelete = comment => async dispatch => {
@@ -63,9 +68,28 @@ export const commentVote = (id, option) => async dispatch => {
   }
 };
 
-export const commentUpdate = ({ prop, value }) => {
+export const commentFormUpdate = ({ prop, value }) => {
   return {
-    type: UPDATE_COMMENT,
+    type: UPDATE_COMMENT_FORM,
     payload: { prop, value }
+  };
+};
+
+export const commentFormReset = () => {
+  return {
+    type: RESET_COMMENT_FORM
+  };
+};
+
+export const commentEditFormUpdate = ({ prop, value }) => {
+  return {
+    type: UPDATE_COMMENT_EDIT_FORM,
+    payload: { prop, value }
+  };
+};
+
+export const commentEditFormReset = () => {
+  return {
+    type: RESET_COMMENT_EDIT_FORM
   };
 };

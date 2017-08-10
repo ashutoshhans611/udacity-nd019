@@ -1,47 +1,38 @@
 import _ from "lodash";
 import React, { Component } from "react";
-
 import { connect } from "react-redux";
-import uuidv1 from "uuid/v1";
-
-import Timestamp from "react-timestamp";
-import {
-  Button,
-  Comment,
-  Form,
-  Header,
-  Icon,
-  Container,
-  Segment,
-  Modal
-} from "semantic-ui-react";
+import { Button, Form, Icon, Modal } from "semantic-ui-react";
 import * as actions from "../actions";
 
 class CommentModal extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.comment !== this.props.comment) {
-      _.each(nextProps.comment, (value, prop) => {
-        this.props.commentUpdate({ prop, value });
+  onMount = () => {
+    if (this.props.comment) {
+      _.each(this.props.comment, (value, prop) => {
+        this.props.commentEditFormUpdate({ prop, value });
       });
     }
-  }
+  };
 
-  updateComment = () => {
+  editComment = () => {
     const { body, author } = this.props;
-    const id = this.props.comment.id;
-    const timestamp = Date.now();
-    this.props.commentEdit({
-      id,
-      timestamp,
-      body,
-      author
-    });
-    this.props.history.push(`/p/${this.props.comment.parentId}`);
-    window.location.href = window.location.href;
+    if (
+      body !== this.props.comment.body ||
+      author !== this.props.comment.author
+    ) {
+      const id = this.props.comment.id;
+      const timestamp = Date.now();
+      this.props.commentEdit({
+        id,
+        timestamp,
+        body,
+        author
+      });
+    }
+    this.props.commentEditFormReset();
   };
 
   render() {
-    const { comment } = this.props;
+    const { body, author } = this.props;
     return (
       <Modal
         trigger={
@@ -49,6 +40,8 @@ class CommentModal extends Component {
             <Icon name="edit" />
           </Button>
         }
+        onMount={this.onMount}
+        onClose={this.editComment}
       >
         <Modal.Header>Edit Comment</Modal.Header>
         <Modal.Content image>
@@ -57,9 +50,9 @@ class CommentModal extends Component {
               <Form.Input
                 label="Author"
                 placeholder="author"
-                value={comment.author}
+                value={author}
                 onChange={event =>
-                  this.props.commentUpdate({
+                  this.props.commentEditFormUpdate({
                     prop: "author",
                     value: event.target.value
                   })}
@@ -67,19 +60,12 @@ class CommentModal extends Component {
               <Form.TextArea
                 label="Body"
                 placeholder="body..."
-                value={comment.body}
+                value={body}
                 onChange={event =>
-                  this.props.commentUpdate({
+                  this.props.commentEditFormUpdate({
                     prop: "body",
                     value: event.target.value
                   })}
-              />
-              <Button
-                onClick={() => this.onCreateButtonClick()}
-                content="Add Comment"
-                labelPosition="left"
-                icon="edit"
-                primary
               />
             </Form>
           </Modal.Description>
@@ -89,8 +75,8 @@ class CommentModal extends Component {
   }
 }
 
-function mapStateToProps({ commentForm }) {
-  const { body, author } = commentForm;
+function mapStateToProps({ commentEditForm }) {
+  const { body, author } = commentEditForm;
   return { body, author };
 }
 

@@ -2,7 +2,7 @@ import _ from "lodash";
 import {
   FETCH_COMMENTS,
   CREATE_COMMENT,
-  SAVE_COMMENT,
+  EDIT_COMMENT,
   DELETE_COMMENT,
   VOTE_COMMENT
 } from "../actions/types";
@@ -14,7 +14,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_COMMENTS:
       return { ...state, [action.postId]: action.comments };
     case CREATE_COMMENT:
-    case SAVE_COMMENT:
+    case EDIT_COMMENT:
     case VOTE_COMMENT:
       let comments = _.filter(
         state[action.comment.parentId],

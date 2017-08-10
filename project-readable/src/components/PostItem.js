@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Timestamp from "react-timestamp";
@@ -45,7 +44,7 @@ class PostItem extends Component {
               </Button>
             </div>
             <div>
-              Comments: {_.filter(comments, c => c.parentId === post.id).length}
+              Comments: {comments[post.id] ? comments[post.id].length : 0}
             </div>
           </Item.Extra>
         </Item.Content>

@@ -24,6 +24,7 @@ class Comments extends Component {
 
   componentWillUnMount() {
     this.props.changeCommentOrder("");
+    this.props.commentFormReset();
   }
 
   onCreateButtonClick() {
@@ -40,7 +41,7 @@ class Comments extends Component {
       parentId
     });
 
-    // this.props.fetchComments(parentId);
+    this.props.commentFormReset();
   }
 
   deleteComment = comment => {
@@ -143,7 +144,7 @@ class Comments extends Component {
                 placeholder="author"
                 value={this.props.author}
                 onChange={event =>
-                  this.props.commentUpdate({
+                  this.props.commentFormUpdate({
                     prop: "author",
                     value: event.target.value
                   })}
@@ -153,7 +154,7 @@ class Comments extends Component {
                 placeholder="body..."
                 value={this.props.body}
                 onChange={event =>
-                  this.props.commentUpdate({
+                  this.props.commentFormUpdate({
                     prop: "body",
                     value: event.target.value
                   })}

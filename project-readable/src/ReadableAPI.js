@@ -76,7 +76,7 @@ export const createComment = comment =>
     body: JSON.stringify(comment)
   }).then(res => res.json());
 
-export const updateComment = comment =>
+export const editComment = comment =>
   fetch(`${api}/comments/${comment.id}`, {
     method: "PUT",
     headers: {

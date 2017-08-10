@@ -12,8 +12,13 @@ class PostEditView extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.post !== this.props.post) {
-      _.each(nextProps.post, (value, prop) => {
+    if (nextProps.posts !== this.props.posts) {
+      const post = _.find(
+        nextProps.posts,
+        p => p.id === this.props.match.params.postId
+      );
+
+      _.each(post, (value, prop) => {
         this.props.postUpdate({ prop, value });
       });
     }
@@ -43,6 +48,7 @@ class PostEditView extends Component {
 
   render() {
     const { categories } = this.props;
+
     return (
       <div>
         <AppHeader categories={categories} />
@@ -65,9 +71,9 @@ class PostEditView extends Component {
   }
 }
 
-const mapStateToProps = ({ postForm, post }) => {
+const mapStateToProps = ({ postForm, posts }) => {
   const { title, body, author, category } = postForm;
-  return { title, body, author, category, post };
+  return { title, body, author, category, posts };
 };
 
 export default connect(mapStateToProps, {
