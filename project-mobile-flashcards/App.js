@@ -6,8 +6,10 @@ import { Constants } from "expo";
 
 import { purple, white } from "./utils/colors";
 import DeckList from "./components/DeckList";
-import DeckDetail from "./components/DeckDetail";
+import Deck from "./components/Deck";
+import Quiz from "./components/Quiz";
 import NewDeck from "./components/NewDeck";
+import NewQuestion from "./components/NewQuestion";
 
 function UdaciStatusBar(props) {
   return (
@@ -60,8 +62,14 @@ const MainNavigator = StackNavigator({
   Home: {
     screen: Tabs
   },
-  DeckDetail: {
-    screen: DeckDetail
+  Deck: {
+    screen: Deck
+  },
+  Quiz: {
+    screen: Quiz
+  },
+  NewQuestion: {
+    screen: NewQuestion
   }
 });
 

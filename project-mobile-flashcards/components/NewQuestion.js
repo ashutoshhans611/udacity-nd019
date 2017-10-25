@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { View, Text } from "react-native";
 
-class NewDeck extends Component {
+class NewQuestion extends Component {
   static navigationOptions = {
-    title: "New Deck"
+    title: "New Question"
   };
 
   render() {
-    return <Text>New Deck</Text>;
+    return <Text>New Question</Text>;
   }
 }
 
-export default NewDeck;
+export default NewQuestion;

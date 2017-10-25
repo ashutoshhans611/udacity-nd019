@@ -4,12 +4,12 @@ import { List, ListItem } from "react-native-elements";
 
 class DeckList extends Component {
   static navigationOptions = {
-    title: "Deck View"
+    title: "Deck List"
   };
 
   state = {
-    data: [
-      {
+    data: {
+      React: {
         title: "React",
         questions: [
           {
@@ -22,7 +22,7 @@ class DeckList extends Component {
           }
         ]
       },
-      {
+      JavaScript: {
         title: "JavaScript",
         questions: [
           {
@@ -32,7 +32,7 @@ class DeckList extends Component {
           }
         ]
       }
-    ]
+    }
   };
 
   render() {
@@ -45,11 +45,11 @@ class DeckList extends Component {
         }}
       >
         <FlatList
-          data={this.state.data}
+          data={Object.values(this.state.data)}
           renderItem={({ item }) => (
             <ListItem
               onPress={() =>
-                this.props.navigation.navigate("DeckDetail", {
+                this.props.navigation.navigate("Deck", {
                   title: item.title
                 })}
               key={item.title}
