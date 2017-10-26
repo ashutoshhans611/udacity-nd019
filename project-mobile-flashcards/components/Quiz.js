@@ -1,67 +1,120 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 
-import { gray, white } from "../utils/colors";
+import * as actions from "../actions";
+import { gray, white, red } from "../utils/colors";
 
 class Quiz extends Component {
   static navigationOptions = {
     title: "Quiz"
   };
 
-  clickCorrect = () => {
-    console.log("click Corrent");
-  };
-  clickIncorrect = () => {
-    console.log("click Incorrent");
-  };
   state = {
-    data: {
-      React: {
-        title: "React",
-        questions: [
-          {
-            question: "What is React?",
-            answer: "A library for managing user interfaces"
-          },
-          {
-            question: "Where do you make Ajax requests in React?",
-            answer: "The componentDidMount lifecycle event"
-          }
-        ]
-      },
-      JavaScript: {
-        title: "JavaScript",
-        questions: [
-          {
-            question: "What is a closure?",
-            answer:
-              "The combination of a function and the lexical environment within which that function was declared."
-          }
-        ]
-      }
+    deck: {},
+    index: 0,
+    correct: 0,
+    incorrect: 0,
+    front: true
+  };
+
+  componentDidMount() {
+    const navParams = this.props.navigation.state.params;
+    const deck = this.props.decks[navParams.title];
+
+    this.setState({ deck });
+  }
+
+  onClickCorrect = () => {
+    let { index, correct } = this.state;
+    index++;
+    correct++;
+
+    if (index <= this.state.deck.questions.length) {
+      this.setState({ index, correct, front: true });
     }
   };
 
+  onClickIncorrect = () => {
+    let { index, incorrect } = this.state;
+    index++;
+    incorrect++;
+
+    if (index <= this.state.deck.questions.length) {
+      this.setState({ index, incorrect, front: true });
+    }
+  };
+
+  renderQuestion(question) {
+    if (this.state.front) {
+      return (
+        <View style={styles.center}>
+          <Text style={{ fontSize: 40 }}>{question.question}</Text>
+          <TouchableOpacity onPress={() => this.setState({ front: false })}>
+            <Text style={{ fontSize: 20, color: red }}>answer</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.center}>
+          <Text style={{ fontSize: 40 }}>{question.answer}</Text>
+          <TouchableOpacity onPress={() => this.setState({ front: true })}>
+            <Text style={{ fontSize: 20, color: red }}>question</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+  }
+
   render() {
-    const navParams = this.props.navigation.state.params;
-    const deck = this.state.data[navParams.title];
+    const { deck, index, correct, incorrect } = this.state;
+
+    if (deck.questions === undefined || deck.questions.length === 0) {
+      return (
+        <View style={{ flex: 1 }}>
+          <View style={styles.center}>
+            <Text style={{ fontSize: 30 }}>No Questions</Text>
+          </View>
+        </View>
+      );
+    }
+
+    remain = index < deck.questions.length ? true : false;
+
+    if (!remain) {
+      return (
+        <View style={{ flex: 1 }}>
+          <View style={styles.center}>
+            <Text style={{ fontSize: 30 }}>Accuracy</Text>
+            <Text style={{ fontSize: 50 }}>
+              {Math.round(correct / (correct + incorrect) * 100)}%
+            </Text>
+          </View>
+        </View>
+      );
+    }
 
     return (
       <View style={{ flex: 1 }}>
-        <View style={styles.center}>
-          <Text style={{ fontSize: 40 }}>{deck.questions[0].question}</Text>
-          <Text style={{ fontSize: 20 }}>{deck.questions[0].answer}</Text>
+        <View>
+          <Text style={{ fontSize: 40 }}>
+            {index + 1}/{deck.questions.length}
+          </Text>
         </View>
+
+        {this.renderQuestion(deck.questions[index])}
+
         <View style={[styles.center, { justifyContent: "flex-start" }]}>
           <TouchableOpacity
             style={[styles.btn, { backgroundColor: white }]}
-            onPress={() => this.clickCorrect}
+            onPress={this.onClickCorrect}
           >
             <Text style={[styles.btnText, { color: gray }]}>Correct</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.btn, { backgroundColor: gray }]}
-            onPress={this.clickIncorrect}
+            onPress={this.onClickIncorrect}
           >
             <Text style={[styles.btnText, { color: white }]}>Incorrect</Text>
           </TouchableOpacity>
@@ -92,4 +145,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Quiz;
+function mapStateToProps({ decks }) {
+  return { decks };
+}
+
+export default connect(mapStateToProps, actions)(Quiz);
