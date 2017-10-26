@@ -10,6 +10,8 @@ export const getDecks = () => async dispatch => {
     let decks = await AsyncStorage.getItem("decks");
     if (decks !== null) {
       decks = JSON.parse(decks);
+    } else {
+      decks = {};
     }
     dispatch({ type: GET_DECKS, payload: decks });
   } catch (error) {
@@ -51,7 +53,7 @@ export const addCardToDeck = (key, question) => async dispatch => {
     if (decks !== null) {
       decks = JSON.parse(decks);
     }
-    decks[key] = decks[key].questions.add(question);
+    decks[key].questions.push(question);
     await AsyncStorage.setItem("decks", JSON.stringify(decks));
     dispatch({ type: ADD_CARD, payload: decks });
   } catch (error) {
