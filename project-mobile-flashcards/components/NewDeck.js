@@ -15,6 +15,11 @@ class NewDeck extends Component {
     title: ""
   };
 
+  onButtonPress = () => {
+    this.props.saveDeckTitle(this.state.title);
+    this.props.navigation.goBack();
+  };
+
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -23,7 +28,7 @@ class NewDeck extends Component {
         <View style={[styles.center, { justifyContent: "flex-start" }]}>
           <TouchableOpacity
             style={[styles.btn, { backgroundColor: white }]}
-            onPress={() => this.props.saveDeckTitle(this.state.title)}
+            onPress={this.onButtonPress}
           >
             <Text style={[styles.btnText, { color: gray }]}>Submit</Text>
           </TouchableOpacity>
