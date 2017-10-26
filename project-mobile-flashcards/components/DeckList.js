@@ -24,6 +24,7 @@ class DeckList extends Component {
         }}
       >
         <FlatList
+          keyExtractor={item => item.title}
           data={Object.values(this.props.decks)}
           renderItem={({ item }) => (
             <ListItem
@@ -31,7 +32,6 @@ class DeckList extends Component {
                 this.props.navigation.navigate("Deck", {
                   title: item.title
                 })}
-              key={item.title}
               title={
                 <View
                   style={{
