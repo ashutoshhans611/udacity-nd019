@@ -45,6 +45,15 @@ class Quiz extends Component {
     }
   };
 
+  onClickRestart = () => {
+    this.setState({
+      index: 0,
+      correct: 0,
+      incorrect: 0,
+      front: true
+    });
+  };
+
   renderQuestion(question) {
     if (this.state.front) {
       return (
@@ -90,6 +99,25 @@ class Quiz extends Component {
             <Text style={{ fontSize: 50 }}>
               {Math.round(correct / (correct + incorrect) * 100)}%
             </Text>
+          </View>
+
+          <View style={[styles.center, { justifyContent: "flex-start" }]}>
+            <TouchableOpacity
+              style={[styles.btn, { backgroundColor: white }]}
+              onPress={this.onClickRestart}
+            >
+              <Text style={[styles.btnText, { color: gray }]}>
+                Restart Quiz
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.btn, { backgroundColor: gray }]}
+              onPress={() => this.props.navigation.goBack()}
+            >
+              <Text style={[styles.btnText, { color: white }]}>
+                Back to Deck
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       );
