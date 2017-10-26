@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 
+import * as actions from "../actions";
 import { gray, white } from "../utils/colors";
 
 class Deck extends Component {
@@ -8,37 +10,9 @@ class Deck extends Component {
     title: "Deck"
   };
 
-  state = {
-    data: {
-      React: {
-        title: "React",
-        questions: [
-          {
-            question: "What is React?",
-            answer: "A library for managing user interfaces"
-          },
-          {
-            question: "Where do you make Ajax requests in React?",
-            answer: "The componentDidMount lifecycle event"
-          }
-        ]
-      },
-      JavaScript: {
-        title: "JavaScript",
-        questions: [
-          {
-            question: "What is a closure?",
-            answer:
-              "The combination of a function and the lexical environment within which that function was declared."
-          }
-        ]
-      }
-    }
-  };
-
   render() {
     const navParams = this.props.navigation.state.params;
-    const deck = this.state.data[navParams.title];
+    const deck = this.props.decks[navParams.title];
 
     return (
       <View style={{ flex: 1 }}>
@@ -92,4 +66,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Deck;
+function mapStateToProps({ decks }) {
+  return { decks };
+}
+
+export default connect(mapStateToProps, actions)(Deck);

@@ -1,39 +1,18 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
 import { List, ListItem } from "react-native-elements";
+import { connect } from "react-redux";
+
+import * as actions from "../actions";
 
 class DeckList extends Component {
   static navigationOptions = {
     title: "Deck List"
   };
 
-  state = {
-    data: {
-      React: {
-        title: "React",
-        questions: [
-          {
-            question: "What is React?",
-            answer: "A library for managing user interfaces"
-          },
-          {
-            question: "Where do you make Ajax requests in React?",
-            answer: "The componentDidMount lifecycle event"
-          }
-        ]
-      },
-      JavaScript: {
-        title: "JavaScript",
-        questions: [
-          {
-            question: "What is a closure?",
-            answer:
-              "The combination of a function and the lexical environment within which that function was declared."
-          }
-        ]
-      }
-    }
-  };
+  componentDidMount() {
+    this.props.getDecks();
+  }
 
   render() {
     return (
@@ -45,7 +24,7 @@ class DeckList extends Component {
         }}
       >
         <FlatList
-          data={Object.values(this.state.data)}
+          data={Object.values(this.props.decks)}
           renderItem={({ item }) => (
             <ListItem
               onPress={() =>
@@ -81,4 +60,8 @@ class DeckList extends Component {
   }
 }
 
-export default DeckList;
+function mapStateToProps({ decks }) {
+  return { decks };
+}
+
+export default connect(mapStateToProps, actions)(DeckList);

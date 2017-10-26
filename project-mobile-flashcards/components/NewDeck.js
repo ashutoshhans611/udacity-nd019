@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { FormLabel, FormInput } from "react-native-elements";
+import { connect } from "react-redux";
 
+import * as actions from "../actions";
 import { gray, white } from "../utils/colors";
 
 class NewDeck extends Component {
@@ -9,15 +11,19 @@ class NewDeck extends Component {
     title: "New Deck"
   };
 
+  state = {
+    title: ""
+  };
+
   render() {
     return (
       <View style={{ flex: 1 }}>
         <FormLabel>What is the title of your new deck?</FormLabel>
-        <FormInput onChangeText={() => console.log("onChangeText")} />
+        <FormInput onChangeText={title => this.setState({ title })} />
         <View style={[styles.center, { justifyContent: "flex-start" }]}>
           <TouchableOpacity
             style={[styles.btn, { backgroundColor: white }]}
-            onPress={() => console.log("new deck")}
+            onPress={() => this.props.saveDeckTitle(this.state.title)}
           >
             <Text style={[styles.btnText, { color: gray }]}>Submit</Text>
           </TouchableOpacity>
@@ -48,4 +54,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NewDeck;
+export default connect(null, actions)(NewDeck);

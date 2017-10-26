@@ -1,9 +1,12 @@
 import React from "react";
 import { View, Platform, StatusBar } from "react-native";
 import { TabNavigator, StackNavigator } from "react-navigation";
+import { createStore } from "redux";
 import { FontAwesome } from "@expo/vector-icons";
 import { Constants } from "expo";
+import { Provider } from "react-redux";
 
+import store from "./store";
 import { purple, white } from "./utils/colors";
 import DeckList from "./components/DeckList";
 import Deck from "./components/Deck";
@@ -76,10 +79,12 @@ const MainNavigator = StackNavigator({
 export default class App extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <UdaciStatusBar barStyle="light-content" />
-        <MainNavigator />
-      </View>
+      <Provider store={store}>
+        <View style={{ flex: 1 }}>
+          <UdaciStatusBar barStyle="light-content" />
+          <MainNavigator />
+        </View>
+      </Provider>
     );
   }
 }
