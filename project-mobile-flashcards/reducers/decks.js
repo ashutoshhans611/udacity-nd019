@@ -1,4 +1,9 @@
-import { GET_DECKS, GET_DECK, SAVE_DECK_TITLE, ADD_CARD } from "../actions";
+import {
+  GET_DECKS,
+  GET_DECK,
+  SAVE_DECK_TITLE,
+  ADD_CARD
+} from "../actions/types";
 
 const INITIAL_STATE = {};
 

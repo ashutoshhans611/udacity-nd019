@@ -1,10 +1,16 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView
+} from "react-native";
 import { FormLabel, FormInput } from "react-native-elements";
 import { connect } from "react-redux";
 
 import * as actions from "../actions";
 import { gray, white } from "../utils/colors";
+import styles from "../styles";
 
 class NewDeck extends Component {
   static navigationOptions = {
@@ -16,15 +22,23 @@ class NewDeck extends Component {
   };
 
   onButtonPress = () => {
-    this.props.saveDeckTitle(this.state.title);
-    this.props.navigation.goBack();
+    this.props.saveDeckTitle(this.state.title).done(() => {
+      this.input.clearText();
+      this.props.getDecks();
+      this.props.navigation.navigate("Deck", {
+        title: this.state.title
+      });
+    });
   };
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <FormLabel>What is the title of your new deck?</FormLabel>
-        <FormInput onChangeText={title => this.setState({ title })} />
+        <FormInput
+          ref={input => (this.input = input)}
+          onChangeText={title => this.setState({ title })}
+        />
         <View style={[styles.center, { justifyContent: "flex-start" }]}>
           <TouchableOpacity
             style={[styles.btn, { backgroundColor: white }]}
@@ -33,30 +47,9 @@ class NewDeck extends Component {
             <Text style={[styles.btnText, { color: gray }]}>Submit</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 30,
-    marginRight: 30
-  },
-  btn: {
-    padding: 10,
-    backgroundColor: gray,
-    alignSelf: "center",
-    borderRadius: 5,
-    margin: 5
-  },
-  btnText: {
-    color: white,
-    fontSize: 20
-  }
-});
 
 export default connect(null, actions)(NewDeck);

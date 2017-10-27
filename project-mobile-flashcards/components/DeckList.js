@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, FlatList } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import { List, ListItem } from "react-native-elements";
 import { connect } from "react-redux";
 
 import * as actions from "../actions";
+import styles from "../styles";
 
 class DeckList extends Component {
   static navigationOptions = {

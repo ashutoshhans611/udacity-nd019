@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
 
 import * as actions from "../actions";
 import { gray, white } from "../utils/colors";
+import styles from "../styles";
 
 class Deck extends Component {
   static navigationOptions = {
@@ -14,8 +15,18 @@ class Deck extends Component {
     const navParams = this.props.navigation.state.params;
     const deck = this.props.decks[navParams.title];
 
+    if (deck === undefined) {
+      return (
+        <View style={{ flex: 1 }}>
+          <View style={styles.center}>
+            <ActivityIndicator />
+          </View>
+        </View>
+      );
+    }
+
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.container}>
         <View style={styles.center}>
           <Text style={{ fontSize: 40 }}>{deck.title}</Text>
           <Text style={{ fontSize: 20 }}>{deck.questions.length} cards</Text>
@@ -44,27 +55,6 @@ class Deck extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 30,
-    marginRight: 30
-  },
-  btn: {
-    padding: 10,
-    backgroundColor: gray,
-    alignSelf: "center",
-    borderRadius: 5,
-    margin: 5
-  },
-  btnText: {
-    color: white,
-    fontSize: 20
-  }
-});
 
 function mapStateToProps({ decks }) {
   return { decks };

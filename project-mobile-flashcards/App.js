@@ -6,15 +6,9 @@ import { Provider } from "react-redux";
 
 import store from "./store";
 import MainNavigator from "./MainNavigator";
+import UdaciStatusBar from "./UdaciStatusBar";
 import { setLocalNotification } from "./utils/helpers";
-
-function UdaciStatusBar(props) {
-  return (
-    <View style={{ height: Constants.statusBarHeight }}>
-      <StatusBar translucent props />
-    </View>
-  );
-}
+import styles from "./styles";
 
 export default class App extends React.Component {
   componentDidMount() {
@@ -25,7 +19,7 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={{ flex: 1 }}>
+        <View style={styles.outerContainer}>
           <UdaciStatusBar barStyle="light-content" />
           <MainNavigator />
         </View>
