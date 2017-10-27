@@ -17,7 +17,7 @@ class NewQuestion extends Component {
   };
 
   onButtonPress = () => {
-    const navParams = this.props.navigation.state.params;
+    const { params: navParams } = this.props.navigation.state;
 
     this.props.addCardToDeck(navParams.title, {
       question: this.state.question,

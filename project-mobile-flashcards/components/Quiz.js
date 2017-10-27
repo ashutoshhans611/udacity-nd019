@@ -96,7 +96,7 @@ class Quiz extends Component {
       );
     }
 
-    remain = index < deck.questions.length ? true : false;
+    const remain = index < deck.questions.length ? true : false;
 
     if (!remain) {
       return (
