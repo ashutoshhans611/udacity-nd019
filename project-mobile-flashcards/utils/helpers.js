@@ -5,14 +5,14 @@ import { Notifications, Permissions } from "expo";
 const NOTIFICATION_KEY = "MobileFlashCards:notifications";
 
 export function clearLocalNotification() {
-  return AsyncStorage.removeItem(NOTIFICATION_KEY).then(a => {
-    Notifications.cancelAllScheduledNotificationsAsync;
-  });
+  return AsyncStorage.removeItem(NOTIFICATION_KEY).then(
+    Notifications.cancelAllScheduledNotificationsAsync
+  );
 }
 
 function createNotification() {
   return {
-    title: "continue quiz!",
+    title: "quiz time!",
     body: "👋 don't forget to finish your quiz!",
     ios: {
       sound: true
@@ -26,6 +26,7 @@ function createNotification() {
   };
 }
 
+// Push notifications are generated at a 8pm if the user hasn't completed at least one quiz for that day.
 export function setLocalNotification() {
   AsyncStorage.getItem(NOTIFICATION_KEY)
     .then(JSON.parse)
@@ -35,9 +36,13 @@ export function setLocalNotification() {
           if (status === "granted") {
             Notifications.cancelAllScheduledNotificationsAsync();
 
+            let tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(20);
+
             Notifications.scheduleLocalNotificationAsync(createNotification(), {
-              time: new Date().getTime() + 1000,
-              repeat: "hour"
+              time: tomorrow,
+              repeat: "day"
             });
 
             AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true));

@@ -24,12 +24,6 @@ class Quiz extends Component {
     const deck = this.props.decks[navParams.title];
 
     this.setState({ deck });
-
-    clearLocalNotification().then(setLocalNotification);
-  }
-
-  componentWillUnmount() {
-    clearLocalNotification();
   }
 
   onClickCorrect = () => {
@@ -40,7 +34,8 @@ class Quiz extends Component {
     if (index <= this.state.deck.questions.length) {
       this.setState({ index, correct, front: true });
     } else {
-      clearLocalNotification();
+      // Skip notifications if the user completed at least one quiz for that day.
+      clearLocalNotification().then(setLocalNotification);
     }
   };
 
@@ -52,7 +47,8 @@ class Quiz extends Component {
     if (index <= this.state.deck.questions.length) {
       this.setState({ index, incorrect, front: true });
     } else {
-      clearLocalNotification();
+      // Skip notifications if the user completed at least one quiz for that day.
+      clearLocalNotification().then(setLocalNotification);
     }
   };
 

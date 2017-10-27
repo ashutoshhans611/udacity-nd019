@@ -3,7 +3,7 @@ import { View, Platform, StatusBar } from "react-native";
 import { TabNavigator, StackNavigator } from "react-navigation";
 import { createStore } from "redux";
 import { FontAwesome } from "@expo/vector-icons";
-import { Constants, Permissions } from "expo";
+import { Constants } from "expo";
 import { Provider } from "react-redux";
 
 import store from "./store";
@@ -13,6 +13,7 @@ import Deck from "./components/Deck";
 import Quiz from "./components/Quiz";
 import NewDeck from "./components/NewDeck";
 import NewQuestion from "./components/NewQuestion";
+import { setLocalNotification } from "./utils/helpers";
 
 function UdaciStatusBar(props) {
   return (
@@ -78,7 +79,8 @@ const MainNavigator = StackNavigator({
 
 export default class App extends React.Component {
   componentDidMount() {
-    Permissions.askAsync(Permissions.NOTIFICATIONS);
+    // Push notifications are generated at a 8pm if the user hasn't completed at least one quiz for that day.
+    setLocalNotification();
   }
 
   render() {
