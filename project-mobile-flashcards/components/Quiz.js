@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import * as actions from "../actions";
 import { gray, white, red } from "../utils/colors";
+import { clearLocalNotification, setLocalNotification } from "../utils/helpers";
 
 class Quiz extends Component {
   static navigationOptions = {
@@ -23,6 +24,12 @@ class Quiz extends Component {
     const deck = this.props.decks[navParams.title];
 
     this.setState({ deck });
+
+    clearLocalNotification().then(setLocalNotification);
+  }
+
+  componentWillUnmount() {
+    clearLocalNotification();
   }
 
   onClickCorrect = () => {
@@ -32,6 +39,8 @@ class Quiz extends Component {
 
     if (index <= this.state.deck.questions.length) {
       this.setState({ index, correct, front: true });
+    } else {
+      clearLocalNotification();
     }
   };
 
@@ -42,6 +51,8 @@ class Quiz extends Component {
 
     if (index <= this.state.deck.questions.length) {
       this.setState({ index, incorrect, front: true });
+    } else {
+      clearLocalNotification();
     }
   };
 

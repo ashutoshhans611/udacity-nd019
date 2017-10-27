@@ -3,7 +3,7 @@ import { View, Platform, StatusBar } from "react-native";
 import { TabNavigator, StackNavigator } from "react-navigation";
 import { createStore } from "redux";
 import { FontAwesome } from "@expo/vector-icons";
-import { Constants } from "expo";
+import { Constants, Permissions } from "expo";
 import { Provider } from "react-redux";
 
 import store from "./store";
@@ -77,6 +77,10 @@ const MainNavigator = StackNavigator({
 });
 
 export default class App extends React.Component {
+  componentDidMount() {
+    Permissions.askAsync(Permissions.NOTIFICATIONS);
+  }
+
   render() {
     return (
       <Provider store={store}>
